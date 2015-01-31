@@ -90,6 +90,13 @@ public class Game {
     private Card adventurer;
 
 
+    /**
+     * Two-player game constructor.
+     *
+     * @param p0 the first player
+     * @param p1 the second player
+     */
+    //Todo decide if these params should be renamed for clarity (e.g. p1, p2, ..)
     public Game(Player p0, Player p1) {
         numPlayers = 2;
         this.players = new Player[numPlayers];
@@ -99,6 +106,13 @@ public class Game {
         supply = new Supply();
     }
 
+    /**
+     * Three-player game constructor.
+     *
+     * @param p0 the first player
+     * @param p1 the second player
+     * @param p2 the third player
+     */
     public Game(Player p0, Player p1, Player p2) {
         numPlayers = 3;
         this.players = new Player[numPlayers];
@@ -109,6 +123,14 @@ public class Game {
         supply = new Supply();
     }
 
+    /**
+     * Four-player game constructor.
+     *
+     * @param p0 the first player
+     * @param p1 the second player
+     * @param p2 the third player
+     * @param p3 the fourth player
+     */
     public Game(Player p0, Player p1, Player p2, Player p3) {
         numPlayers = 4;
         this.players = new Player[numPlayers];
@@ -120,12 +142,20 @@ public class Game {
         supply = new Supply();
     }
 
+    /**
+     * Play a new game.
+     *
+     * @return The winning player index.
+     */
     public int run() {
         init();
         playGame();
         return determineWinner();
     }
 
+    /**
+     * Set up initial game state.
+     */
     public void init() {
         initCards();
         addCardsToSupply();
@@ -157,6 +187,7 @@ public class Game {
         gardens = Card.initializeVictoryCard("Gardens", 4, new GardensValue());
     }
 
+    //Todo finish the rest of the action cards.
     private void initActionCards() {
         cellar = Card.initializeActionCard("Cellar", 2, new CellarAction());
         //chapel;
@@ -223,16 +254,26 @@ public class Game {
             for (int i = 0; i < 3; i++) {
                 player.discard(supply.take(Supply.ESTATE));
             }
+            // Used here so that each player shuffles discard pile into deck and draws starting hand.
             player.cleanUp();
         }
     }
 
+    /**
+     * This step is part of player initialization. Classes which extend player may do preliminary work
+     * in their setUp methods. The call to setUp() is guaranteed to be after all relevant game state
+     * (e.g. the kingdom cards in the supply) has been completely built and is ready for viewing by the player.
+     */
     private void allowExtendingClassSetUp() {
         for (Player player : players) {
             player.setUp();
         }
     }
 
+    /**
+     * A starting player is randomly selected, and the players alternate taking turns until game-ending
+     * conditions are met.
+     */
     public void playGame() {
         // Select starting player randomly
         int playerIndex = (int) Math.round(Math.random() * (numPlayers - 1));
@@ -246,6 +287,15 @@ public class Game {
         }
     }
 
+    /**
+     * Checks to see if game-ending conditions have been met.
+     *
+     * These conditions are:
+     *  - The pile containing provinces is empty.
+     *  - Three piles of cards in the supply are empty
+     *
+     * @return true if any of the game-ending conditions have been met, false otherwise
+     */
     public boolean gameOver() {
         int numEmptyPiles = supply.getNumEmptyPiles();
         if (numEmptyPiles == 0) {
@@ -259,6 +309,16 @@ public class Game {
         return false;
     }
 
+    /**
+     * Moves each player's cards into his/her respective deck and calculates the number of victory points
+     * the deck contains. The player index with the highest number of points is returned.
+     *
+     * In the case of a tie, the player who has taken fewer turns is the winner. If two or more tied players
+     * have taken the same number of turns, these players share the victory according to the rules.
+     * Note: these draw conditions have only been implemented for two players.
+     *
+     * @return the index of the winning player
+     */
     public int determineWinner() {
         //Todo implement having multiple winners (based on rules).
         int highestScore = Integer.MIN_VALUE;
