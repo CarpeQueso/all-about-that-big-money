@@ -18,7 +18,7 @@ public class BigMoneySmithyBot extends Player {
 
     @Override
     public void setUp() {
-
+        //Todo search for smithy card and find index so you don't have to rely on a specific position.
     }
 
     @Override
@@ -43,13 +43,19 @@ public class BigMoneySmithyBot extends Player {
             //System.out.println("Buys Gold");
             buy(Supply.GOLD);
         } else if (availableCoins >= 4 && numSmithies < 1) {
-            //Todo find better way to access cards you want. This is only the smithy card for this kingdom.
-            buy(Supply.KINGDOM_6);
+            //Todo find better way to access cards you want. KINGDOM_7 is only the smithy card for this kingdom.
+            buy(Supply.KINGDOM_7);
             numSmithies++;
         } else if (availableCoins >= 3) {
             //System.out.println("Buys Silver");
             buy(Supply.SILVER);
         }
+    }
+
+    public void reset() {
+        super.reset();
+
+        numSmithies = 0;
     }
 
     @Override

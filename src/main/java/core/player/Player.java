@@ -47,6 +47,16 @@ public abstract class Player {
     }
 
     /**
+     * Assumes that reset will be called after game completion. At this point, all cards this player
+     * possesses are guaranteed to be in the deck. As such, none of the other card piles (Active Pile, Discard Pile,
+     * Hand, etc.) are emptied. The deck is emptied and the number of turns the player has taken is set to 0.
+     */
+    public void reset() {
+        deck.clear(); // Remove all cards this player has to prep for new game.
+        turnsTaken = 0;
+    }
+
+    /**
      * Removes and returns the top card from the deck. This is useful when actions have conditional card draw
      * and the returned card may be discarded instead of being added to the hand. If the deck is empty, this
      * method will try to shuffle the discard pile into the deck.
@@ -120,7 +130,7 @@ public abstract class Player {
         return hand.remove(cardIndex);
     }
 
-    //Todo determine if it's bad to assume this comes from the kingdom. Maybe it isn't.
+    //Todo add messaging system "hook" here.
     public boolean gain(int supplyIndex) {
         if (supply.getNumCardsRemaining(supplyIndex) > 0) {
             discard(supply.take(supplyIndex));
@@ -161,14 +171,9 @@ public abstract class Player {
      * Call before buy phase in takeTurn, but after action phase. That distinction is important.
      */
     public void playAllTreasure() {
-        // This loop is intentionally missing an increment within the body.
-        // The index should only increment if the card is not played. Play removes the card from the list.
-        for (int i = 0; i < hand.size();) {
+        for (int i = hand.size() - 1; i >= 0; i--) {
             if (hand.get(i).getType() == Card.TYPE_TREASURE) {
-                // This call bumps another card down to our current index. Don't increment.
                 play(i);
-            } else {
-                i++;
             }
         }
     }
@@ -177,7 +182,7 @@ public abstract class Player {
      * Attempts to buy the specified card from the kingdom and add to discard pile.
      * Will NOT modify state if buy is unsuccessful.
      *
-     * @param card the card to be bought
+     * @param supplyIndex the position in the supply of the card to be bought
      * @return true if the buy is successful, false otherwise
      */
     public boolean buy(int supplyIndex) {
@@ -187,6 +192,7 @@ public abstract class Player {
         Card card = supply.view(supplyIndex);
 
         // Explicit else statements remain for clarity.
+        //Todo decide if this check should remain or if you only need to check for available buys elsewhere
         if (availableBuys > 0) {
             if (card.getCost() <= getAvailableCoins()) {
                 discard(supply.take(supplyIndex));
@@ -220,7 +226,7 @@ public abstract class Player {
     }
 
     public void trashFromHand(int cardIndex) {
-        supply.trash(hand.remove(cardIndex));
+        trash(hand.remove(cardIndex));
     }
 
     public boolean handContains(int cardType) {

@@ -4,8 +4,6 @@ import main.java.card.Card;
 import main.java.card.action.*;
 import main.java.card.value.GardensValue;
 import main.java.card.value.SimpleValue;
-import main.java.core.player.BigMoneyBot;
-import main.java.core.player.BigMoneySmithyBot;
 import main.java.core.player.Player;
 
 /**
@@ -13,154 +11,129 @@ import main.java.core.player.Player;
  */
 public class Game {
 
+    //Todo alter this if expansions are added.
+    public static final int TOTAL_AVAILABLE_CARDS = 32;
+
+    // Core Dominion templateCards (base set).
+
+    // Cards used every game.
+    public static final int COPPER_ID = 0;
+
+    public static final int SILVER_ID = 1;
+
+    public static final int GOLD_ID = 2;
+
+    public static final int CURSE_ID = 3;
+
+    public static final int ESTATE_ID = 4;
+
+    public static final int DUCHY_ID = 5;
+
+    public static final int PROVINCE_ID = 6;
+
+    // Cards which are not necessarily used every game.
+    public static final int GARDENS_ID = 7;
+
+    public static final int CELLAR_ID = 8;
+
+    public static final int CHAPEL_ID = 9;
+
+    public static final int MOAT_ID = 10;
+
+    public static final int CHANCELLOR_ID = 11;
+
+    public static final int VILLAGE_ID = 12;
+
+    public static final int WOODCUTTER_ID = 13;
+
+    public static final int WORKSHOP_ID = 14;
+
+    public static final int BUREAUCRAT_ID = 15;
+
+    public static final int FEAST_ID = 16;
+
+    public static final int MILITIA_ID = 17;
+
+    public static final int MONEYLENDER_ID = 18;
+
+    public static final int REMODEL_ID = 19;
+
+    public static final int SMITHY_ID = 20;
+
+    public static final int SPY_ID = 21;
+
+    public static final int THIEF_ID = 22;
+
+    public static final int THRONE_ROOM_ID = 23;
+
+    public static final int COUNCIL_ROOM_ID = 24;
+
+    public static final int FESTIVAL_ID = 25;
+
+    public static final int LABORATORY_ID = 26;
+
+    public static final int LIBRARY_ID = 27;
+
+    public static final int MARKET_ID = 28;
+
+    public static final int MINE_ID = 29;
+
+    public static final int WITCH_ID = 30;
+
+    public static final int ADVENTURER_ID = 31;
+
+
     private Player[] players;
+
+    private Card[] templateCards;
 
     private Supply supply;
 
     private final int numPlayers;
 
-    /*
-     * Template cards!
-     */
-    // Treasure
-    private Card copper;
-
-    private Card silver;
-
-    private Card gold;
-
-    // Victory
-    private Card curse;
-
-    private Card estate;
-
-    private Card duchy;
-
-    private Card province;
-
-    private Card gardens;
-
-    // Action
-    private Card cellar;
-
-    private Card chapel;
-
-    private Card moat;
-
-    private Card chancellor;
-
-    private Card village;
-
-    private Card woodcutter;
-
-    private Card workshop;
-
-    private Card bureaucrat;
-
-    private Card feast;
-
-    private Card militia;
-
-    private Card moneylender;
-
-    private Card remodel;
-
-    private Card smithy;
-
-    private Card spy;
-
-    private Card thief;
-
-    private Card throneRoom;
-
-    private Card councilRoom;
-
-    private Card festival;
-
-    private Card laboratory;
-
-    private Card library;
-
-    private Card market;
-
-    private Card mine;
-
-    private Card witch;
-
-    private Card adventurer;
-
-
     /**
-     * Two-player game constructor.
+     * Game constructor.
      *
-     * @param p0 the first player
-     * @param p1 the second player
+     * @param players
      */
-    //Todo decide if these params should be renamed for clarity (e.g. p1, p2, ..)
-    public Game(Player p0, Player p1) {
-        numPlayers = 2;
-        this.players = new Player[numPlayers];
-        players[0] = p0;
-        players[1] = p1;
+    public Game(Player[] players) {
+        numPlayers = players.length;
+        this.players = players;
+        templateCards = new Card[TOTAL_AVAILABLE_CARDS];
 
         supply = new Supply();
-    }
 
-    /**
-     * Three-player game constructor.
-     *
-     * @param p0 the first player
-     * @param p1 the second player
-     * @param p2 the third player
-     */
-    public Game(Player p0, Player p1, Player p2) {
-        numPlayers = 3;
-        this.players = new Player[numPlayers];
-        players[0] = p0;
-        players[1] = p1;
-        players[2] = p2;
+        for (Player player : this.players) {
+            player.setSupply(supply);
+        }
 
-        supply = new Supply();
-    }
-
-    /**
-     * Four-player game constructor.
-     *
-     * @param p0 the first player
-     * @param p1 the second player
-     * @param p2 the third player
-     * @param p3 the fourth player
-     */
-    public Game(Player p0, Player p1, Player p2, Player p3) {
-        numPlayers = 4;
-        this.players = new Player[numPlayers];
-        players[0] = p0;
-        players[1] = p1;
-        players[2] = p2;
-        players[3] = p3;
-
-        supply = new Supply();
+        initCards();
+        addBaseCardsToSupply();
     }
 
     /**
      * Play a new game.
      *
+     * @param cardsToUse sorted array of card IDs to use during this run of the game. Should be of length 10.
+     *
      * @return The winning player index.
      */
-    public int run() {
-        init();
+    public int run(int[] cardsToUse) {
+        setup(cardsToUse);
         playGame();
         return determineWinner();
     }
 
     /**
      * Set up initial game state.
+     *
+     * @param cardsToUse
      */
-    public void init() {
-        initCards();
-        addCardsToSupply();
+    public void setup(int[] cardsToUse) {
+        addKingdomCardsToSupply(cardsToUse);
+        supply.reset();
         for (Player player : players) {
-            player.setSupply(supply);
+            player.reset();
         }
         buildPlayerStartingDecks();
         allowExtendingClassSetUp();
@@ -172,79 +145,70 @@ public class Game {
         initActionCards();
     }
 
-    //Todo decide if the next two methods need named constants
     private void initTreasureCards() {
-        copper = Card.initializeTreasureCard("Copper", 0, new SimpleValue(1));
-        silver = Card.initializeTreasureCard("Silver", 3, new SimpleValue(2));
-        gold = Card.initializeTreasureCard("Gold", 6, new SimpleValue(3));
+        templateCards[COPPER_ID] = Card.initializeTreasureCard("Copper", COPPER_ID, 0, new SimpleValue(1));
+        templateCards[SILVER_ID] = Card.initializeTreasureCard("Silver", SILVER_ID, 3, new SimpleValue(2));
+        templateCards[GOLD_ID] = Card.initializeTreasureCard("Gold", GOLD_ID, 6, new SimpleValue(3));
     }
 
     private void initVictoryCards() {
-        curse = Card.initializeVictoryCard("Curse", 0, new SimpleValue(-1));
-        estate = Card.initializeVictoryCard("Estate", 2, new SimpleValue(1));
-        duchy = Card.initializeVictoryCard("Duchy", 5, new SimpleValue(3));
-        province = Card.initializeVictoryCard("Province", 8, new SimpleValue(6));
-        gardens = Card.initializeVictoryCard("Gardens", 4, new GardensValue());
+        templateCards[CURSE_ID] = Card.initializeVictoryCard("Curse", CURSE_ID, 0, new SimpleValue(-1));
+        templateCards[ESTATE_ID] = Card.initializeVictoryCard("Estate", ESTATE_ID, 2, new SimpleValue(1));
+        templateCards[DUCHY_ID] = Card.initializeVictoryCard("Duchy", DUCHY_ID, 5, new SimpleValue(3));
+        templateCards[PROVINCE_ID] = Card.initializeVictoryCard("Province", PROVINCE_ID, 8, new SimpleValue(6));
+        templateCards[GARDENS_ID] = Card.initializeVictoryCard("Gardens", GARDENS_ID, 4, new GardensValue());
     }
 
-    //Todo finish the rest of the action cards.
+    //Todo finish the rest of the action templateCards.
     private void initActionCards() {
-        cellar = Card.initializeActionCard("Cellar", 2, new CellarAction());
-        //chapel;
-        moat = Card.initializeReactionCard("Moat", 2, new MoatAction());
-        //chancellor;
-        village = Card.initializeActionCard("Village", 3, new VillageAction());
-        woodcutter = Card.initializeActionCard("Woodcutter", 3, new WoodcutterAction());
-        workshop = Card.initializeActionCard("Workshop", 3, new WorkshopAction());
-        //bureaucrat;
-        //feast;
-        militia = Card.initializeActionCard("Militia", 4, new MilitiaAction(players));
-        //moneylender;
-        remodel = Card.initializeActionCard("Remodel", 4, new RemodelAction());
-        smithy = Card.initializeActionCard("Smithy", 4, new SmithyAction());
-        //spy;
-        //thief;
-        //throneRoom;
-        councilRoom = Card.initializeActionCard("Council Room", 5, new CouncilRoomAction(players));
-        festival = Card.initializeActionCard("Festival", 5, new FestivalAction());
-        laboratory = Card.initializeActionCard("Laboratory", 5, new LaboratoryAction());
-        //library;
-        market = Card.initializeActionCard("Market", 5, new MarketAction());
-        mine = Card.initializeActionCard("Mine", 5, new MineAction());
-        witch = Card.initializeActionCard("Witch", 5, new WitchAction(players, curse));
-        adventurer = Card.initializeActionCard("Adventurer", 6, new AdventurerAction());
+        templateCards[CELLAR_ID] = Card.initializeActionCard("Cellar", CELLAR_ID, 2, new CellarAction());
+        //templateCards[CHAPEL_ID] = Card.initializeActionCard("Chapel", CHAPEL_ID, 2, new ChapelAction());
+        templateCards[MOAT_ID] = Card.initializeReactionCard("Moat", MOAT_ID, 2, new MoatAction());
+        //templateCards[CHANCELLOR_ID] = Card.initializeActionCard("Chancellor", CHANCELLOR_ID, 3, new ChancellorAction());
+        templateCards[VILLAGE_ID] = Card.initializeActionCard("Village", VILLAGE_ID, 3, new VillageAction());
+        templateCards[WOODCUTTER_ID] = Card.initializeActionCard("Woodcutter", WOODCUTTER_ID, 3, new WoodcutterAction());
+        templateCards[WORKSHOP_ID] = Card.initializeActionCard("Workshop", WORKSHOP_ID, 3, new WorkshopAction());
+        //templateCards[BUREAUCRAT_ID] = Card.initializeActionCard("Bureaucrat", BUREAUCRAT_ID, 4, new BureaucratAction());
+        //templateCards[FEAST_ID] = Card.initializeActionCard("Feast", FEAST_ID, 4, new FeastAction());
+        templateCards[MILITIA_ID] = Card.initializeActionCard("Militia", MILITIA_ID, 4, new MilitiaAction(players));
+        //templateCards[MONEYLENDER_ID] = Card.initializeActionCard("Moneylender", MONEYLENDER_ID, 4, new MoneylenderAction());
+        templateCards[REMODEL_ID] = Card.initializeActionCard("Remodel", REMODEL_ID, 4, new RemodelAction());
+        templateCards[SMITHY_ID] = Card.initializeActionCard("Smithy", SMITHY_ID, 4, new SmithyAction());
+        //templateCards[SPY_ID] = Card.initializeActionCard("Spy", SPY_ID, 4, new SpyAction());
+        //templateCards[THIEF_ID] = Card.initializeActionCard("Thief", THIEF_ID, 4, new ThiefAction());
+        //templateCards[THRONE_ROOM_ID] = Card.initializeActionCard("Throne Room", THRONE_ROOM_ID, 4, new ThroneRoomAction());
+        templateCards[COUNCIL_ROOM_ID] = Card.initializeActionCard("Council Room", COUNCIL_ROOM_ID, 5, new CouncilRoomAction(players));
+        templateCards[FESTIVAL_ID] = Card.initializeActionCard("Festival", FESTIVAL_ID, 5, new FestivalAction());
+        templateCards[LABORATORY_ID] = Card.initializeActionCard("Laboratory", LABORATORY_ID, 5, new LaboratoryAction());
+        //templateCards[LIBRARY_ID] = Card.initializeActionCard("Library", LIBRARY_ID, 5, new LibraryAction());
+        templateCards[MARKET_ID] = Card.initializeActionCard("Market", MARKET_ID, 5, new MarketAction());
+        templateCards[MINE_ID] = Card.initializeActionCard("Mine", MINE_ID, 5, new MineAction());
+        templateCards[WITCH_ID] = Card.initializeActionCard("Witch", WITCH_ID, 5, new WitchAction(players));
+        templateCards[ADVENTURER_ID] = Card.initializeActionCard("Adventurer", ADVENTURER_ID, 6, new AdventurerAction());
     }
 
-    private void addCardsToSupply() {
-        //Add standard cards to the kingdom
-        //Todo Make these numbers named constants
-        supply.add(Supply.COPPER, copper, 60);
-        supply.add(Supply.SILVER, silver, 40);
-        supply.add(Supply.GOLD, gold, 30);
+    private void addBaseCardsToSupply() {
+        //Add standard templateCards to the kingdom
+        supply.add(Supply.COPPER, templateCards[COPPER_ID], 60);
+        supply.add(Supply.SILVER, templateCards[SILVER_ID], 40);
+        supply.add(Supply.GOLD, templateCards[GOLD_ID], 30);
 
-        supply.add(Supply.CURSE, curse, numPlayers * 10 - 10); // Standard number of curses according to game rules.
-        //Todo change number of these cards based on number of players
-        supply.add(Supply.ESTATE, estate, 20);
-        supply.add(Supply.DUCHY, duchy, 10);
-        supply.add(Supply.PROVINCE, province, 10);
+        supply.add(Supply.CURSE, templateCards[CURSE_ID], numPlayers * 10 - 10); // Standard number of curses according to game rules.
+        //Todo change number of these templateCards based on number of players
+        supply.add(Supply.ESTATE, templateCards[ESTATE_ID], 14);
+        supply.add(Supply.DUCHY, templateCards[DUCHY_ID], 8);
+        supply.add(Supply.PROVINCE, templateCards[PROVINCE_ID], 8);
+    }
 
-        //Todo determine a means by which to select random kingdom cards
-
-        // This set is based on the "first game" kingdom cards recommended by the rulebook.
-        // They may be later changed to be randomly determined.
-        supply.add(Supply.KINGDOM_0, cellar, 10);
-        supply.add(Supply.KINGDOM_1, market, 10);
-        supply.add(Supply.KINGDOM_2, militia, 10);
-        supply.add(Supply.KINGDOM_3, mine, 10);
-        supply.add(Supply.KINGDOM_4, moat, 10);
-        supply.add(Supply.KINGDOM_5, remodel, 10);
-        supply.add(Supply.KINGDOM_6, smithy, 10);
-        supply.add(Supply.KINGDOM_7, village, 10);
-        supply.add(Supply.KINGDOM_8, woodcutter, 10);
-        supply.add(Supply.KINGDOM_9, workshop, 10);
+    private void addKingdomCardsToSupply(int[] cardsToUse) {
+        for (int supplyPosition = Supply.KINGDOM_0, i = 0; supplyPosition <= Supply.KINGDOM_9; supplyPosition++, i++) {
+            supply.add(supplyPosition, templateCards[cardsToUse[i]], 10);
+        }
     }
 
     private void buildPlayerStartingDecks() {
+        // Although this sort of reeks of hard-coding things, the coppers and estates are
+        // basically guaranteed to be in these positions, so I'm going to leave it be.
         for (Player player : players) {
             // Give player 7 copper
             for (int i = 0; i < 7; i++) {
@@ -262,7 +226,7 @@ public class Game {
     /**
      * This step is part of player initialization. Classes which extend player may do preliminary work
      * in their setUp methods. The call to setUp() is guaranteed to be after all relevant game state
-     * (e.g. the kingdom cards in the supply) has been completely built and is ready for viewing by the player.
+     * (e.g. the kingdom templateCards in the supply) has been completely built and is ready for viewing by the player.
      */
     private void allowExtendingClassSetUp() {
         for (Player player : players) {
@@ -275,14 +239,17 @@ public class Game {
      * conditions are met.
      */
     public void playGame() {
-        // Select starting player randomly
+        // Selects starting player randomly.
+        // This randomization is important. If not used, some strategies will have a higher than expected
+        // win percentage.
+        //Todo fix this line. Does not give an even distribution for more than 2 players.
         int playerIndex = (int) Math.round(Math.random() * (numPlayers - 1));
         Player currentPlayer = players[playerIndex];
 
         while (!gameOver()) {
             //System.out.println("--- Player " + playerIndex + "\'s Turn ---");
             currentPlayer.takeTurn();
-            playerIndex = (playerIndex + 1) % players.length;
+            playerIndex = (playerIndex + 1) % numPlayers;
             currentPlayer = players[playerIndex];
         }
     }
@@ -292,7 +259,7 @@ public class Game {
      *
      * These conditions are:
      *  - The pile containing provinces is empty.
-     *  - Three piles of cards in the supply are empty
+     *  - Three piles of templateCards in the supply are empty
      *
      * @return true if any of the game-ending conditions have been met, false otherwise
      */
@@ -301,7 +268,7 @@ public class Game {
         if (numEmptyPiles == 0) {
             return false;
         }
-        if (numEmptyPiles == 3) {
+        if (numEmptyPiles >= 3) {
             return true;
         } else if (supply.getNumCardsRemaining(Supply.PROVINCE) == 0) {
             return true;
@@ -310,7 +277,7 @@ public class Game {
     }
 
     /**
-     * Moves each player's cards into his/her respective deck and calculates the number of victory points
+     * Moves each player's templateCards into his/her respective deck and calculates the number of victory points
      * the deck contains. The player index with the highest number of points is returned.
      *
      * In the case of a tie, the player who has taken fewer turns is the winner. If two or more tied players
@@ -327,7 +294,7 @@ public class Game {
         int currentPlayerScore;
         int currentPlayerTurns;
 
-        for (int i = 0; i < players.length; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             players[i].moveAllCardsToDeck();
             currentPlayerScore = players[i].getTotalVictoryPointsInDeck();
             currentPlayerTurns = players[i].getNumTurnsTaken();
@@ -348,28 +315,5 @@ public class Game {
         }
 
         return winningPlayerIndex;
-    }
-
-    public static void main(String[] args) {
-        double p0Wins = 0;
-        double p1Wins = 0;
-        int draws = 0;
-        int totalGames = 10000;
-
-        for (int i = 0; i < totalGames; i++) {
-            int winner = new Game(new BigMoneyBot(), new BigMoneySmithyBot()).run();
-            if (winner == 0) {
-                p0Wins++;
-            } else if (winner == 1) {
-                p1Wins++;
-            } else {
-                p0Wins += 0.5;
-                p1Wins += 0.5;
-            }
-        }
-
-        System.out.println("P0: " + p0Wins);
-        System.out.println("P1: " + p1Wins);
-        //System.out.println("Draws: " + draws);
     }
 }

@@ -11,11 +11,8 @@ public class WitchAction implements Action {
 
     private Player[] players;
 
-    private Card curse;
-
-    public WitchAction(Player[] players, Card curse) {
+    public WitchAction(Player[] players) {
         this.players = players;
-        this.curse = curse;
     }
 
     public void onPlay(Player actingPlayer) {

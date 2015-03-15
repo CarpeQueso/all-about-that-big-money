@@ -12,7 +12,7 @@ public class TestCard {
 
     @Test
     public void testCardCopyEquality() {
-        Card c1 = Card.initializeVictoryCard("Test Card", 1, new SimpleValue(1));
+        Card c1 = Card.initializeVictoryCard("Test Card", 0, 1, new SimpleValue(1));
         Card c2 = Card.initializeCard(c1);
 
         assertTrue(c1.equals(c2));

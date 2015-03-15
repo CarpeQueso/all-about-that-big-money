@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Supply {
 
-    public static final int TOTAL_CARD_TYPES = 17;
+    public static final int TOTAL_SUPPLY_CARDS = 17;
 
     public static final int KINGDOM_0 = 0;
 
@@ -54,19 +54,23 @@ public class Supply {
 
     private int numEmptyPiles;
 
+    private String supplyString;
+
     /**
      * Default constructor.
      */
     public Supply() {
-        supplyPiles = new Pile[TOTAL_CARD_TYPES];
+        supplyPiles = new Pile[TOTAL_SUPPLY_CARDS];
         trash = new ArrayList<Card>();
+        supplyString = null;
 
         numEmptyPiles = 0;
     }
 
     /**
      * Adds a new pile of cards to the supply. The given card will serve as a template
-     * to generate new cards taken from the corresponding pile.
+     * to generate new cards taken from the corresponding pile. If the associated supply
+     * index is already in use, it will be overwritten.
      *
      * @param card the template card to use for this pile
      * @param totalAvailableCards the number of cards in the pile
@@ -116,6 +120,7 @@ public class Supply {
      *
      * @return an array of 10 reference cards representing the available kingdom cards.
      */
+    //Todo determine if this method should be taken to the chopping block.
     public Card[] getAvailableKingdomCards() {
         if (kingdom == null) {
             kingdom = new Card[10];
@@ -135,8 +140,37 @@ public class Supply {
         return numEmptyPiles;
     }
 
+    //TODO decide if reset is necessary. May not be.
+    public void reset() {
+        trash.clear();
+        numEmptyPiles = 0;
+        for (Pile pile : supplyPiles) {
+            pile.reset();
+        }
+    }
+
+    //Todo figure out a more reasonable way to do this, maybe.
+    public String supplyCards() {
+        if (supplyString == null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Index\tCard Name - Cost\n\n");
+
+            Card card;
+            for (int i = 0; i < supplyPiles.length; i++) {
+                card = supplyPiles[i].view();
+                sb.append(i + "\t\t");
+                sb.append(card.getName() + " - " + card.getCost() + "\n");
+            }
+
+            supplyString = sb.toString();
+        }
+        return supplyString;
+    }
+
 
     class Pile {
+
+        private final int totalAvailableCards;
 
         private int numCardsRemaining;
 
@@ -144,6 +178,7 @@ public class Supply {
 
         public Pile(Card templateCard, int totalAvailableCards) {
             this.templateCard = templateCard;
+            this.totalAvailableCards = totalAvailableCards;
             numCardsRemaining = totalAvailableCards;
         }
 
@@ -170,6 +205,10 @@ public class Supply {
          */
         public int getNumCardsRemaining() {
             return numCardsRemaining;
+        }
+
+        public void reset() {
+            numCardsRemaining = totalAvailableCards;
         }
     }
 }
