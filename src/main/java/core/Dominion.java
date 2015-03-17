@@ -1,10 +1,8 @@
 package main.java.core;
 
-import main.java.card.Card;
-import main.java.core.player.BigMoneyBot;
-import main.java.core.player.BigMoneySmithyBot;
-import main.java.core.player.HumanPlayer;
-import main.java.core.player.Player;
+import main.java.player.BigMoneyBot;
+import main.java.player.BigMoneySmithyBot;
+import main.java.player.Player;
 
 /**
  * Created by jon on 3/13/15.

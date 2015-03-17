@@ -1,7 +1,8 @@
-package main.java.core.player;
+package main.java.player;
 
 import main.java.card.Card;
 import main.java.core.Supply;
+import main.java.util.messaging.PlayerEvent;
 
 /**
  * Created by jon on 1/31/15.
@@ -58,6 +59,8 @@ public class BigMoneySmithyBot extends Player {
         numSmithies = 0;
     }
 
+
+
     @Override
     public boolean react() {
         return false;
@@ -96,5 +99,10 @@ public class BigMoneySmithyBot extends Player {
     @Override
     public int onMineGain(int costLimit) {
         return 0;
+    }
+
+    @Override
+    public void onNotify(Player activePlayer, PlayerEvent event, int cardID) {
+
     }
 }

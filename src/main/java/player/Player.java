@@ -1,7 +1,10 @@
-package main.java.core.player;
+package main.java.player;
 
 import main.java.card.Card;
 import main.java.core.Supply;
+import main.java.util.messaging.Microphone;
+import main.java.util.messaging.PlayerEvent;
+import main.java.util.messaging.Receiver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,7 +13,7 @@ import java.util.LinkedList;
 /**
  * Created by jon on 1/16/15.
  */
-public abstract class Player {
+public abstract class Player implements Receiver {
 
     protected Supply supply;
 
@@ -25,6 +28,8 @@ public abstract class Player {
     private ArrayList<Card> activePile;
 
     //Todo add a revealed pile to help with odd interactions
+
+    private Microphone microphone;
 
     private int turnsTaken;
 
@@ -134,6 +139,7 @@ public abstract class Player {
     public boolean gain(int supplyIndex) {
         if (supply.getNumCardsRemaining(supplyIndex) > 0) {
             discard(supply.take(supplyIndex));
+            microphone.say(this, PlayerEvent.GAIN, supply.view(supplyIndex).id());
             return true;
         }
         return false;
@@ -146,11 +152,13 @@ public abstract class Player {
      *
      * @param handIndex the card in hand to be played
      */
+    //Todo refactor eventually. Too many repeated statements..
     protected void play(int handIndex) {
         Card playedCard = hand.remove(handIndex);
         if (playedCard.getType() == Card.TYPE_TREASURE) {
             availableCoins += playedCard.getValue(this);
             activePile.add(playedCard);
+            microphone.say(this, PlayerEvent.PLAY, playedCard.id());
         } else if (playedCard.getType() == Card.TYPE_ACTION
                 || playedCard.getType() == Card.TYPE_REACTION) {
             if (availableActions > 0) {
@@ -158,6 +166,7 @@ public abstract class Player {
 
                 playedCard.onPlay(this); // resolve action
                 activePile.add(playedCard);
+                microphone.say(this, PlayerEvent.PLAY, playedCard.id());
             } else {
                 // You ran out of actions. Do nothing.
             }
@@ -195,7 +204,7 @@ public abstract class Player {
         //Todo decide if this check should remain or if you only need to check for available buys elsewhere
         if (availableBuys > 0) {
             if (card.getCost() <= getAvailableCoins()) {
-                discard(supply.take(supplyIndex));
+                gain(supplyIndex);
                 availableCoins -= card.getCost();
                 availableBuys--;
                 return true;
@@ -223,6 +232,7 @@ public abstract class Player {
 
     public void trash(Card card) {
         supply.trash(card);
+        microphone.say(this, PlayerEvent.TRASH, card.id());
     }
 
     public void trashFromHand(int cardIndex) {
@@ -334,6 +344,10 @@ public abstract class Player {
         this.supply = supply;
     }
 
+    public void setMicrophone(Microphone microphone) {
+        this.microphone = microphone;
+    }
+
     public void addActions(int numActions) {
         availableActions += numActions;
     }
@@ -345,6 +359,8 @@ public abstract class Player {
     public void addCoins(int numCoins) {
         availableCoins += numCoins;
     }
+
+    public abstract void onNotify(Player activePlayer, PlayerEvent event, int cardID);
 
     /**
      * If this method is called, the player is being attacked AND has a reaction card in hand.

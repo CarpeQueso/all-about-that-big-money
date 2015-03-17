@@ -1,6 +1,6 @@
 package main.java.card.action;
 
-import main.java.core.player.Player;
+import main.java.player.Player;
 
 import java.util.Arrays;
 

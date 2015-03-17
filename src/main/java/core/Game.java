@@ -4,7 +4,9 @@ import main.java.card.Card;
 import main.java.card.action.*;
 import main.java.card.value.GardensValue;
 import main.java.card.value.SimpleValue;
-import main.java.core.player.Player;
+import main.java.player.Player;
+import main.java.util.messaging.Channel;
+import main.java.util.messaging.Microphone;
 
 /**
  * Created by jon on 1/16/15.
@@ -83,6 +85,8 @@ public class Game {
     public static final int ADVENTURER_ID = 31;
 
 
+    private Channel playerChannel;
+
     private Player[] players;
 
     private Card[] templateCards;
@@ -102,10 +106,15 @@ public class Game {
         templateCards = new Card[TOTAL_AVAILABLE_CARDS];
 
         supply = new Supply();
+        playerChannel = new Channel();
 
         for (Player player : this.players) {
+            playerChannel.addReceiver(player);
+            player.setMicrophone(new Microphone(playerChannel));
+
             player.setSupply(supply);
         }
+
 
         initCards();
         addBaseCardsToSupply();

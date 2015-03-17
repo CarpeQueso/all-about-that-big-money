@@ -2,7 +2,7 @@ package main.java.card;
 
 import main.java.card.action.Action;
 import main.java.card.value.Value;
-import main.java.core.player.Player;
+import main.java.player.Player;
 
 /**
  * Created by jon on 1/16/15.

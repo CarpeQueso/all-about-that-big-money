@@ -1,11 +1,7 @@
-package main.java.core.player;
+package main.java.player;
 
-import main.java.card.Card;
 import main.java.core.Supply;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
+import main.java.util.messaging.PlayerEvent;
 
 /**
  * Created by jon on 1/28/15.
@@ -43,6 +39,11 @@ public class BigMoneyBot extends Player {
             //System.out.println("Buys Silver");
             buy(Supply.SILVER);
         }
+    }
+
+    @Override
+    public void onNotify(Player activePlayer, PlayerEvent event, int cardID) {
+
     }
 
     @Override
