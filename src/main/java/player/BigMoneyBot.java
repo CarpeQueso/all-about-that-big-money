@@ -1,5 +1,6 @@
 package main.java.player;
 
+import main.java.card.Card;
 import main.java.core.Supply;
 import main.java.util.messaging.PlayerEvent;
 
@@ -42,7 +43,7 @@ public class BigMoneyBot extends Player {
     }
 
     @Override
-    public void onNotify(Player activePlayer, PlayerEvent event, int cardID) {
+    public void onNotify(Player activePlayer, PlayerEvent event, Card card) {
 
     }
 

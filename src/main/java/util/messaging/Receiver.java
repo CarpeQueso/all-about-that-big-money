@@ -1,5 +1,6 @@
 package main.java.util.messaging;
 
+import main.java.card.Card;
 import main.java.player.Player;
 
 /**
@@ -8,5 +9,5 @@ import main.java.player.Player;
 public interface Receiver {
 
     //Todo abstract later if necessary
-    void onNotify(Player activePlayer, PlayerEvent event, int cardID);
+    void onNotify(Player activePlayer, PlayerEvent event, Card card);
 }

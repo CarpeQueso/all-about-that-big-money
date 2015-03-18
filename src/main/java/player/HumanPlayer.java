@@ -72,8 +72,8 @@ public class HumanPlayer extends Player {
         }
     }
 
-    public void onNotify(Player activePlayer, PlayerEvent event, int cardID) {
-        
+    public void onNotify(Player activePlayer, PlayerEvent event, Card card) {
+
     }
 
     @Override

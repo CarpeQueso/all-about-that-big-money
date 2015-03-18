@@ -1,5 +1,6 @@
 package main.java.util.messaging;
 
+import main.java.card.Card;
 import main.java.player.Player;
 
 /**
@@ -12,8 +13,8 @@ public class Microphone {
     }
 
     //Todo abstract later if necessary
-    public void say(Player activePlayer, PlayerEvent event, int cardID) {
-        channel.broadcast(activePlayer, event, cardID);
+    public void say(Player activePlayer, PlayerEvent event, Card card) {
+        channel.broadcast(activePlayer, event, card);
     }
 
     public void setChannel(Channel channel) {

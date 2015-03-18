@@ -139,7 +139,7 @@ public abstract class Player implements Receiver {
     public boolean gain(int supplyIndex) {
         if (supply.getNumCardsRemaining(supplyIndex) > 0) {
             discard(supply.take(supplyIndex));
-            microphone.say(this, PlayerEvent.GAIN, supply.view(supplyIndex).id());
+            microphone.say(this, PlayerEvent.GAIN, supply.view(supplyIndex));
             return true;
         }
         return false;
@@ -158,7 +158,7 @@ public abstract class Player implements Receiver {
         if (playedCard.getType() == Card.TYPE_TREASURE) {
             availableCoins += playedCard.getValue(this);
             activePile.add(playedCard);
-            microphone.say(this, PlayerEvent.PLAY, playedCard.id());
+            microphone.say(this, PlayerEvent.PLAY, playedCard);
         } else if (playedCard.getType() == Card.TYPE_ACTION
                 || playedCard.getType() == Card.TYPE_REACTION) {
             if (availableActions > 0) {
@@ -166,7 +166,7 @@ public abstract class Player implements Receiver {
 
                 playedCard.onPlay(this); // resolve action
                 activePile.add(playedCard);
-                microphone.say(this, PlayerEvent.PLAY, playedCard.id());
+                microphone.say(this, PlayerEvent.PLAY, playedCard);
             } else {
                 // You ran out of actions. Do nothing.
             }
@@ -232,7 +232,7 @@ public abstract class Player implements Receiver {
 
     public void trash(Card card) {
         supply.trash(card);
-        microphone.say(this, PlayerEvent.TRASH, card.id());
+        microphone.say(this, PlayerEvent.TRASH, card);
     }
 
     public void trashFromHand(int cardIndex) {
@@ -360,7 +360,7 @@ public abstract class Player implements Receiver {
         availableCoins += numCoins;
     }
 
-    public abstract void onNotify(Player activePlayer, PlayerEvent event, int cardID);
+    public abstract void onNotify(Player activePlayer, PlayerEvent event, Card card);
 
     /**
      * If this method is called, the player is being attacked AND has a reaction card in hand.

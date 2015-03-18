@@ -1,5 +1,6 @@
 package main.java.util.messaging;
 
+import main.java.card.Card;
 import main.java.player.Player;
 
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ public class Channel {
         receivers.remove(receiver);
     }
 
-    public void broadcast(Player activePlayer, PlayerEvent event, int cardID) {
+    public void broadcast(Player activePlayer, PlayerEvent event, Card card) {
         for (Receiver receiver : receivers) {
-            receiver.onNotify(activePlayer, event, cardID);
+            receiver.onNotify(activePlayer, event, card);
         }
     }
 

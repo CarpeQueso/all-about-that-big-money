@@ -102,7 +102,7 @@ public class BigMoneySmithyBot extends Player {
     }
 
     @Override
-    public void onNotify(Player activePlayer, PlayerEvent event, int cardID) {
+    public void onNotify(Player activePlayer, PlayerEvent event, Card card) {
 
     }
 }

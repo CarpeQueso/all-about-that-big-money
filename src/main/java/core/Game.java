@@ -7,6 +7,7 @@ import main.java.card.value.SimpleValue;
 import main.java.player.Player;
 import main.java.util.messaging.Channel;
 import main.java.util.messaging.Microphone;
+import main.java.util.messaging.SimpleLogger;
 
 /**
  * Created by jon on 1/16/15.
@@ -114,6 +115,9 @@ public class Game {
 
             player.setSupply(supply);
         }
+
+        //Todo make this conditional with a verbose option (or something better)
+        playerChannel.addReceiver(new SimpleLogger(System.out));
 
 
         initCards();
