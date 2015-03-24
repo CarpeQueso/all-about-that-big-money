@@ -72,6 +72,11 @@ public class BigMoneySmithyBot extends Player {
     }
 
     @Override
+    public boolean onChancellor() {
+        return false;
+    }
+
+    @Override
     public int onWorkshop() {
         return 0;
     }

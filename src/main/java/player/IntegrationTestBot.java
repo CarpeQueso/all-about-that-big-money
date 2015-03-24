@@ -3,42 +3,36 @@ package main.java.player;
 import main.java.card.Card;
 import main.java.core.Supply;
 import main.java.util.messaging.PlayerEvent;
+import main.java.util.messaging.Receiver;
 
 /**
- * Created by jon on 1/28/15.
+ * Created by jon on 3/24/15.
  */
-public class BigMoneyBot extends Player {
-
-    public BigMoneyBot(/*Supply supply*/) {
-        super(/*supply*/);
-
-        // Do something else?
-    }
+public class IntegrationTestBot extends Player implements Receiver {
 
     @Override
     public void setUp() {
-        // Set up?
+
     }
 
     @Override
     public void onActionPhase() {
-        // Do nothing
+
     }
 
     @Override
     public void onBuyPhase() {
-        int availableCoins = this.getAvailableCoins();
-        //System.out.println("Has " + availableCoins + " to spend");
-
-        if (availableCoins >= 8) {
-            //System.out.println("Buys Province");
-            buy(Supply.PROVINCE);
-        } else if (availableCoins >= 6) {
-            //System.out.println("Buys Gold");
-            buy(Supply.GOLD);
-        } else if (availableCoins >= 3) {
-            //System.out.println("Buys Silver");
-            buy(Supply.SILVER);
+        while (this.getAvailableBuys() > 0) {
+            // Another one of those awful times that this code is terrible, but I'm going to write it anyway.
+            int maxCost = this.getAvailableCoins();
+            outerLoop: for (int cost = maxCost; cost >= 0; cost--) {
+                for (int i = Supply.KINGDOM_0; i < Supply.TOTAL_SUPPLY_CARDS; i++) {
+                    if (supply.view(i).getCost() == cost) {
+                        this.buy(i);
+                        break outerLoop;
+                    }
+                }
+            }
         }
     }
 
@@ -49,13 +43,12 @@ public class BigMoneyBot extends Player {
 
     @Override
     public boolean react() {
-        // Do nothing
         return false;
     }
 
     @Override
     public void onCellar(boolean[] discardDecisions) {
-        // Do nothing
+
     }
 
     @Override
@@ -65,37 +58,31 @@ public class BigMoneyBot extends Player {
 
     @Override
     public int onWorkshop() {
-        // Do nothing
         return 0;
     }
 
     @Override
     public int[] onMilitiaAttack() {
-        // Do nothing
         return new int[0];
     }
 
     @Override
     public int onRemodelTrash() {
-        // Do nothing
         return 0;
     }
 
     @Override
     public int onRemodelGain(int costLimit) {
-        // Do nothing
         return 0;
     }
 
     @Override
     public int onMineTrash() {
-        // Do nothing
         return 0;
     }
 
     @Override
     public int onMineGain(int costLimit) {
-        // Do nothing
         return 0;
     }
 }

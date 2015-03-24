@@ -78,13 +78,18 @@ public class HumanPlayer extends Player {
 
     @Override
     public boolean react() {
-        stream.println("You've been attacked! Do you want to reveal the action card in your hand? [y/n]");
-        return input.next().charAt(0) == 'y';
+        stream.println("You've been attacked! Do you want to reveal the reaction card in your hand? [y/n]");
+        return input.next().trim().toLowerCase().charAt(0) == 'y';
     }
 
     @Override
     public void onCellar(boolean[] discardDecisions) {
 
+    }
+
+    @Override
+    public boolean onChancellor() {
+        return true;
     }
 
     @Override

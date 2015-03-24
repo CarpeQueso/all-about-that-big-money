@@ -1,6 +1,7 @@
 package main.java.player;
 
 import main.java.card.Card;
+import main.java.core.Game;
 import main.java.core.Supply;
 import main.java.util.messaging.Microphone;
 import main.java.util.messaging.PlayerEvent;
@@ -135,7 +136,6 @@ public abstract class Player implements Receiver {
         return hand.remove(cardIndex);
     }
 
-    //Todo add messaging system "hook" here.
     public boolean gain(int supplyIndex) {
         if (supply.getNumCardsRemaining(supplyIndex) > 0) {
             discard(supply.take(supplyIndex));
@@ -165,7 +165,12 @@ public abstract class Player implements Receiver {
                 availableActions--;
 
                 playedCard.onPlay(this); // resolve action
-                activePile.add(playedCard);
+                // Yes I hate myself for doing this. Yes I'm doing it anyway..
+                if (playedCard.id() == Game.FEAST_ID) {
+                    trash(playedCard);
+                } else {
+                    activePile.add(playedCard);
+                }
                 microphone.say(this, PlayerEvent.PLAY, playedCard);
             } else {
                 // You ran out of actions. Do nothing.
@@ -372,6 +377,12 @@ public abstract class Player implements Receiver {
 
     // Note: true means you should discard the card at that index in the hand
     public abstract void onCellar(boolean[] discardDecisions);
+
+    /**
+     * Decide whether to put deck in discard pile.
+     * @return true if you want to put your deck into your discard pile
+     */
+    public abstract boolean onChancellor();
 
     /**
      * Choose a card of cost <= 4 to gain

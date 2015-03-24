@@ -177,7 +177,7 @@ public class Game {
         templateCards[CELLAR_ID] = Card.initializeActionCard("Cellar", CELLAR_ID, 2, new CellarAction());
         //templateCards[CHAPEL_ID] = Card.initializeActionCard("Chapel", CHAPEL_ID, 2, new ChapelAction());
         templateCards[MOAT_ID] = Card.initializeReactionCard("Moat", MOAT_ID, 2, new MoatAction());
-        //templateCards[CHANCELLOR_ID] = Card.initializeActionCard("Chancellor", CHANCELLOR_ID, 3, new ChancellorAction());
+        templateCards[CHANCELLOR_ID] = Card.initializeActionCard("Chancellor", CHANCELLOR_ID, 3, new ChancellorAction());
         templateCards[VILLAGE_ID] = Card.initializeActionCard("Village", VILLAGE_ID, 3, new VillageAction());
         templateCards[WOODCUTTER_ID] = Card.initializeActionCard("Woodcutter", WOODCUTTER_ID, 3, new WoodcutterAction());
         templateCards[WORKSHOP_ID] = Card.initializeActionCard("Workshop", WORKSHOP_ID, 3, new WorkshopAction());
