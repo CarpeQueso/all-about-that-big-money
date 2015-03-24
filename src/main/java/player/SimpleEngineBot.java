@@ -44,15 +44,15 @@ public class SimpleEngineBot extends Player implements Receiver {
     public void onBuyPhase() {
         while (this.getAvailableBuys() > 0) {
             int availableCoins = this.getAvailableCoins();
-            if (availableCoins >= 8) {
+            if (availableCoins >= 8 && supply.getNumCardsRemaining(Supply.PROVINCE) > 0) {
                 this.buy(Supply.PROVINCE);
             } else if (availableCoins >= 6) {
                 this.buy(Supply.GOLD);
-            } else if (availableCoins >= 5 && marketIndex != -1) { // index = -1 indicates the card is not in the game
+            } else if (availableCoins >= 5 && marketIndex != -1 && supply.getNumCardsRemaining(marketIndex) > 0) { // index = -1 indicates the card is not in the game
                 this.buy(marketIndex);
-            } else if (availableCoins >= 4 && smithyIndex != -1) {
+            } else if (availableCoins >= 4 && smithyIndex != -1 && supply.getNumCardsRemaining(smithyIndex) > 0) {
                 this.buy(smithyIndex);
-            } else if (availableCoins >= 3 && villageIndex != -1) {
+            } else if (availableCoins >= 3 && villageIndex != -1 && supply.getNumCardsRemaining(villageIndex) > 0) {
                 this.buy(villageIndex);
             } else {
                 // I don't want any cards

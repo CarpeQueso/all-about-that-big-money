@@ -15,7 +15,7 @@ public class Dominion {
     public static void main(String[] args) {
         Player[] players = new Player[2]; // This is set at 2 for now since we're focusing on the 2-player game.
         players[0] = new BigMoneyBot();
-        //players[1] = new BigMoneySmithyBot();
+        //players[0] = new BigMoneySmithyBot();
         players[1] = new SimpleEngineBot();
 
         Game game = new Game(players);
