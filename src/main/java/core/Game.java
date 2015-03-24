@@ -117,7 +117,7 @@ public class Game {
         }
 
         //Todo make this conditional with a verbose option (or something better)
-        playerChannel.addReceiver(new SimpleLogger(System.out));
+        //playerChannel.addReceiver(new SimpleLogger(System.out));
 
 
         initCards();

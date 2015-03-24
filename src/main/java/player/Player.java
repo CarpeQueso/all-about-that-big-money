@@ -128,6 +128,15 @@ public abstract class Player implements Receiver {
         return hand.indexOf(card);
     }
 
+    public int findCardInHand(int cardID) {
+        for (int i = 0; i < hand.size(); i++) {
+            if (hand.get(i).id() == cardID) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public void addCardToHand(Card card) {
         hand.add(card);
     }
@@ -244,9 +253,18 @@ public abstract class Player implements Receiver {
         trash(hand.remove(cardIndex));
     }
 
-    public boolean handContains(int cardType) {
+    public boolean handContainsType(int cardType) {
         for (Card card : hand) {
             if (card.getType() == cardType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean handContainsCard(int cardID) {
+        for (Card card : hand) {
+            if (card.id() == cardID) {
                 return true;
             }
         }

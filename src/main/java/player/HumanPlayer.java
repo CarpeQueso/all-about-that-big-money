@@ -30,7 +30,7 @@ public class HumanPlayer extends Player {
         stream.println(" Action Phase");
         stream.println("--------------");
         int handIndex;
-        while (this.getAvailableActions() > 0 && this.handContains(Card.TYPE_ACTION)) {
+        while (this.getAvailableActions() > 0 && this.handContainsType(Card.TYPE_ACTION)) {
             stream.print("Available actions: ");
             stream.println(this.getAvailableActions());
             this.printHand();
