@@ -36,6 +36,7 @@ public class HumanPlayer extends Player {
             this.printHand();
             stream.print("Choose a card to play: ");
             handIndex = input.nextInt();
+            if (handIndex == -1) { break; }
             if (handIndex >= 0 && handIndex < this.getHandSize()) {
                 this.play(handIndex);
             } else {
@@ -100,22 +101,58 @@ public class HumanPlayer extends Player {
 
     @Override
     public int onRemodelTrash() {
-        return 0;
+        printHand();
+        stream.println("Which card do you want to remodel?");
+        int handIndex = input.nextInt();
+        while (handIndex < 0 || handIndex >= this.getHandSize()) {
+            stream.println("This index is out of bounds. Choose another..");
+            handIndex = input.nextInt();
+        }
+
+        return handIndex;
     }
 
     @Override
     public int onGain(int costLimit) {
-        return 0;
+        stream.println(supply.supplyCards());
+        stream.println("Choose a card of cost " + costLimit + " or below to gain.");
+        int supplyIndex = input.nextInt();
+        while (supplyIndex < 0 || supplyIndex >= Supply.TOTAL_SUPPLY_CARDS
+                || supply.view(supplyIndex).getCost() > costLimit) {
+            stream.println("This index is out of bounds or the card is over the cost limit. Choose another..");
+            supplyIndex = input.nextInt();
+        }
+
+        return supplyIndex;
     }
 
     @Override
     public int onMineTrash() {
-        return 0;
+        printHand();
+        stream.println("Which treasure card do you want to trash?");
+        int handIndex = input.nextInt();
+        while (handIndex < 0 || handIndex >= this.getHandSize()
+                || hand.get(handIndex).getType() != Card.TYPE_TREASURE) {
+            stream.println("This index is out of bounds or the card is not a treasure card. Choose another..");
+            handIndex = input.nextInt();
+        }
+
+        return handIndex;
     }
 
     @Override
     public int onMineGain(int costLimit) {
-        return 0;
+        stream.println(supply.supplyCards());
+        stream.println("Choose a card of cost " + costLimit + " or below to gain.");
+        int supplyIndex = input.nextInt();
+        while (supplyIndex < 0 || supplyIndex >= Supply.TOTAL_SUPPLY_CARDS
+                || supply.view(supplyIndex).getType() != Card.TYPE_TREASURE
+                || supply.view(supplyIndex).getCost() > costLimit) {
+            stream.println("This index is out of bounds, the card is not a treasure card, or it is above the cost limit. Choose another..");
+            supplyIndex = input.nextInt();
+        }
+
+        return supplyIndex;
     }
 
     public void printHand() {

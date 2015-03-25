@@ -154,6 +154,15 @@ public abstract class Player implements Receiver {
         return false;
     }
 
+    public boolean gainToHand(int supplyIndex) {
+        if (supply.getNumCardsRemaining(supplyIndex) > 0) {
+            addCardToHand(supply.take(supplyIndex));
+            microphone.say(this, PlayerEvent.GAIN, supply.view(supplyIndex));
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Note: this method WILL remove the card to play from the player's hand.
      *
@@ -171,6 +180,7 @@ public abstract class Player implements Receiver {
         } else if (playedCard.getType() == Card.TYPE_ACTION
                 || playedCard.getType() == Card.TYPE_REACTION) {
             if (availableActions > 0) {
+                //Todo continue to be cognisant of whether adding to activePile at the end is an issue.
                 availableActions--;
 
                 playedCard.onPlay(this); // resolve action

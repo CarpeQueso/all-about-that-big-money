@@ -15,6 +15,6 @@ public class MineAction implements Action {
         player.trash(trashCard);
 
         // Gain a treasure card costing up to 3 more than the trashed card
-        player.gain(player.onMineGain(trashCardCost + 3));
+        player.gainToHand(player.onMineGain(trashCardCost + 3));
     }
 }
