@@ -15,6 +15,6 @@ public class RemodelAction implements Action {
         player.trash(trashCard);
 
         // Gain a card costing up to 2 more than the trashed card
-        player.gain(player.onRemodelGain(trashCardCost + 2));
+        player.gain(player.onGain(trashCardCost + 2));
     }
 }

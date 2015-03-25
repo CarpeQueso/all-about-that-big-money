@@ -89,12 +89,8 @@ public class HumanPlayer extends Player {
 
     @Override
     public boolean onChancellor() {
-        return true;
-    }
-
-    @Override
-    public int onWorkshop() {
-        return 0;
+        stream.println("Do you want to place your deck into your discard pile? [y/n]");
+        return input.next().trim().toLowerCase().charAt(0) == 'y';
     }
 
     @Override
@@ -108,7 +104,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public int onRemodelGain(int costLimit) {
+    public int onGain(int costLimit) {
         return 0;
     }
 

@@ -8,6 +8,6 @@ import main.java.player.Player;
 public class WorkshopAction implements Action {
 
     public void onPlay(Player player) {
-        player.gain(player.onWorkshop());
+        player.gain(player.onGain(4));
     }
 }

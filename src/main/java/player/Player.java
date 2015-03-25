@@ -403,12 +403,6 @@ public abstract class Player implements Receiver {
     public abstract boolean onChancellor();
 
     /**
-     * Choose a card of cost <= 4 to gain
-     * @return the supply pile index of the card you choose
-     */
-    public abstract int onWorkshop();
-
-    /**
      *
      * @return an int array of size 3 containing the indices of cards you want to keep
      */
@@ -429,7 +423,7 @@ public abstract class Player implements Receiver {
      *
      * @return the supply pile index of the card you want to gain from the supply after trashing a card
      */
-    public abstract int onRemodelGain(int costLimit);
+    public abstract int onGain(int costLimit);
 
     /**
      *

@@ -64,12 +64,6 @@ public class BigMoneyBot extends Player {
     }
 
     @Override
-    public int onWorkshop() {
-        // Do nothing
-        return 0;
-    }
-
-    @Override
     public int[] onMilitiaAttack() {
         // Do nothing
         return new int[0];
@@ -82,7 +76,7 @@ public class BigMoneyBot extends Player {
     }
 
     @Override
-    public int onRemodelGain(int costLimit) {
+    public int onGain(int costLimit) {
         // Do nothing
         return 0;
     }
