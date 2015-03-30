@@ -182,7 +182,7 @@ public class Game {
         templateCards[WOODCUTTER_ID] = Card.initializeActionCard("Woodcutter", WOODCUTTER_ID, 3, new WoodcutterAction());
         templateCards[WORKSHOP_ID] = Card.initializeActionCard("Workshop", WORKSHOP_ID, 3, new WorkshopAction());
         //templateCards[BUREAUCRAT_ID] = Card.initializeActionCard("Bureaucrat", BUREAUCRAT_ID, 4, new BureaucratAction());
-        //templateCards[FEAST_ID] = Card.initializeActionCard("Feast", FEAST_ID, 4, new FeastAction());
+        templateCards[FEAST_ID] = Card.initializeActionCard("Feast", FEAST_ID, 4, new FeastAction());
         templateCards[MILITIA_ID] = Card.initializeActionCard("Militia", MILITIA_ID, 4, new MilitiaAction(players));
         //templateCards[MONEYLENDER_ID] = Card.initializeActionCard("Moneylender", MONEYLENDER_ID, 4, new MoneylenderAction());
         templateCards[REMODEL_ID] = Card.initializeActionCard("Remodel", REMODEL_ID, 4, new RemodelAction());

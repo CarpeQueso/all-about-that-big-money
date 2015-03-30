@@ -85,7 +85,14 @@ public class HumanPlayer extends Player {
 
     @Override
     public void onCellar(boolean[] discardDecisions) {
+        stream.println("How many cards do you want to discard?");
+        int numCardsToDiscard = input.nextInt();
 
+        printHand();
+        stream.println("Enter the indices of each card to discard.");
+        for (int i = 0; i < numCardsToDiscard; i++) {
+            discardDecisions[input.nextInt()] = true;
+        }
     }
 
     @Override

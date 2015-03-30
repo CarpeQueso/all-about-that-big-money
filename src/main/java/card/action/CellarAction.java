@@ -2,12 +2,14 @@ package main.java.card.action;
 
 import main.java.player.Player;
 
+import java.util.Arrays;
+
 /**
  * Created by jon on 1/27/15.
  */
 public class CellarAction implements Action {
 
-    //Todo this reeeeaaaally needs to be tested.
+    //Todo this is much more straightforward than the previous version. Still, test.
     public void onPlay(Player player) {
         player.addActions(1);
 
@@ -17,17 +19,13 @@ public class CellarAction implements Action {
         player.onCellar(discardDecisions);
 
         // Once the player has made a decision, discard the cards they specified.
-        int handIndex = 0;
+        // The number of discarded cards is kept so that you know how many to draw later.
         int numCardsDiscarded = 0;
 
-        for (int i = 0; i < discardDecisions.length; i++) {
+        for (int i = discardDecisions.length - 1; i >= 0; i--) {
             if (discardDecisions[i]) { // i.e. you want to discard this card
-                player.discardFromHand(handIndex);
+                player.discardFromHand(i);
                 numCardsDiscarded++;
-            } else {
-                // Only increments if a card was not discarded. By the nature of the player's hand,
-                // a discarded card will bring the next card down to the current index. Kind of a messy system, this..
-                handIndex++;
             }
         }
 
