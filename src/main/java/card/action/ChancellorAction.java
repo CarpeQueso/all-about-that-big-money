@@ -11,7 +11,7 @@ public class ChancellorAction implements Action {
         player.addCoins(2);
 
         if (player.onChancellor()) {
-            while (player.getDeckSize() > 0) {
+            while (player.deckSize() > 0) {
                 player.discard(player.draw());
             }
         }

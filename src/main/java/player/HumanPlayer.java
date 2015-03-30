@@ -30,14 +30,14 @@ public class HumanPlayer extends Player {
         stream.println(" Action Phase");
         stream.println("--------------");
         int handIndex;
-        while (this.getAvailableActions() > 0 && this.handContainsType(Card.TYPE_ACTION)) {
+        while (this.availableActions() > 0 && this.handContainsType(Card.TYPE_ACTION)) {
             stream.print("Available actions: ");
-            stream.println(this.getAvailableActions());
+            stream.println(this.availableActions());
             this.printHand();
             stream.print("Choose a card to play: ");
             handIndex = input.nextInt();
             if (handIndex == -1) { break; }
-            if (handIndex >= 0 && handIndex < this.getHandSize()) {
+            if (handIndex >= 0 && handIndex < this.handSize()) {
                 this.play(handIndex);
             } else {
                 stream.println("That hand index is invalid. Try again.");
@@ -53,11 +53,11 @@ public class HumanPlayer extends Player {
         //Todo print in supply method or something else. This feels weird.
         stream.println(supply.supplyCards());
         int supplyIndex;
-        while (this.getAvailableBuys() > 0 && this.getAvailableCoins() > 0) {
+        while (this.availableBuys() > 0 && this.availableCoins() > 0) {
             stream.print("Available buys: ");
-            stream.println(this.getAvailableBuys());
+            stream.println(this.availableBuys());
             stream.print("Available coins: ");
-            stream.println(this.getAvailableCoins());
+            stream.println(this.availableCoins());
             stream.print("Choose a card to buy: ");
             supplyIndex = input.nextInt();
             if (supplyIndex == -1) {
@@ -102,8 +102,21 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public int[] onMilitiaAttack() {
-        return new int[0];
+    public int onBureaucratAttack() {
+        printHand();
+        stream.println("You've been attacked! Which victory card do you want to place onto your deck?");
+        int handIndex = input.nextInt();
+        while (handIndex < 0 || handIndex >= this.handSize() || hand.get(handIndex).getType() != Card.TYPE_VICTORY) {
+            stream.println("This index is out of bounds or the card is not a victory card. Choose another..");
+            handIndex = input.nextInt();
+        }
+
+        return handIndex;
+    }
+
+    @Override
+    public void onMilitiaAttack(final int[] cardsToKeep) {
+
     }
 
     @Override
@@ -111,7 +124,7 @@ public class HumanPlayer extends Player {
         printHand();
         stream.println("Which card do you want to remodel?");
         int handIndex = input.nextInt();
-        while (handIndex < 0 || handIndex >= this.getHandSize()) {
+        while (handIndex < 0 || handIndex >= this.handSize()) {
             stream.println("This index is out of bounds. Choose another..");
             handIndex = input.nextInt();
         }
@@ -134,11 +147,17 @@ public class HumanPlayer extends Player {
     }
 
     @Override
+    public boolean onLibrary(Card actionCard) {
+        stream.println("You drew " + actionCard.getName() + ". Do you want to keep it? [y/n]");
+        return input.next().trim().toLowerCase().charAt(0) == 'y';
+    }
+
+    @Override
     public int onMineTrash() {
         printHand();
         stream.println("Which treasure card do you want to trash?");
         int handIndex = input.nextInt();
-        while (handIndex < 0 || handIndex >= this.getHandSize()
+        while (handIndex < 0 || handIndex >= this.handSize()
                 || hand.get(handIndex).getType() != Card.TYPE_TREASURE) {
             stream.println("This index is out of bounds or the card is not a treasure card. Choose another..");
             handIndex = input.nextInt();

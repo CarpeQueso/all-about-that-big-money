@@ -27,7 +27,7 @@ public class BigMoneyBot extends Player {
 
     @Override
     public void onBuyPhase() {
-        int availableCoins = this.getAvailableCoins();
+        int availableCoins = this.availableCoins();
         //System.out.println("Has " + availableCoins + " to spend");
 
         if (availableCoins >= 8) {
@@ -64,9 +64,13 @@ public class BigMoneyBot extends Player {
     }
 
     @Override
-    public int[] onMilitiaAttack() {
-        // Do nothing
-        return new int[0];
+    public int onBureaucratAttack() {
+        return 0;
+    }
+
+    @Override
+    public void onMilitiaAttack(final int[] cardsToKeep) {
+
     }
 
     @Override
@@ -79,6 +83,11 @@ public class BigMoneyBot extends Player {
     public int onGain(int costLimit) {
         // Do nothing
         return 0;
+    }
+
+    @Override
+    public boolean onLibrary(Card actionCard) {
+        return false;
     }
 
     @Override

@@ -22,9 +22,9 @@ public class IntegrationTestBot extends Player implements Receiver {
 
     @Override
     public void onBuyPhase() {
-        while (this.getAvailableBuys() > 0) {
+        while (this.availableBuys() > 0) {
             // Another one of those awful times that this code is terrible, but I'm going to write it anyway.
-            int maxCost = this.getAvailableCoins();
+            int maxCost = this.availableCoins();
             outerLoop: for (int cost = maxCost; cost >= 0; cost--) {
                 for (int i = Supply.KINGDOM_0; i < Supply.TOTAL_SUPPLY_CARDS; i++) {
                     if (supply.view(i).getCost() == cost) {
@@ -57,8 +57,13 @@ public class IntegrationTestBot extends Player implements Receiver {
     }
 
     @Override
-    public int[] onMilitiaAttack() {
-        return new int[0];
+    public int onBureaucratAttack() {
+        return 0;
+    }
+
+    @Override
+    public void onMilitiaAttack(final int[] cardsToKeep) {
+
     }
 
     @Override
@@ -69,6 +74,11 @@ public class IntegrationTestBot extends Player implements Receiver {
     @Override
     public int onGain(int costLimit) {
         return 0;
+    }
+
+    @Override
+    public boolean onLibrary(Card actionCard) {
+        return false;
     }
 
     @Override

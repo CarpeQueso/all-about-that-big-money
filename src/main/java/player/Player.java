@@ -145,6 +145,17 @@ public abstract class Player implements Receiver {
         return hand.remove(cardIndex);
     }
 
+    /**
+     * Only to be used by relevant action cards. Not for extending class use.
+     *
+     * @param card the card to put on top of this player's deck
+     */
+    public void putCardOnDeck(Card card) {
+        if (card != null) {
+            deck.addFirst(card);
+        }
+    }
+
     public boolean gain(int supplyIndex) {
         if (supply.getNumCardsRemaining(supplyIndex) > 0) {
             discard(supply.take(supplyIndex));
@@ -227,7 +238,7 @@ public abstract class Player implements Receiver {
         // Explicit else statements remain for clarity.
         //Todo decide if this check should remain or if you only need to check for available buys elsewhere
         if (availableBuys > 0) {
-            if (card.getCost() <= getAvailableCoins()) {
+            if (card.getCost() <= availableCoins()) {
                 gain(supplyIndex);
                 availableCoins -= card.getCost();
                 availableBuys--;
@@ -349,27 +360,27 @@ public abstract class Player implements Receiver {
         return supply;
     }
 
-    public int getAvailableActions() {
+    public int availableActions() {
         return availableActions;
     }
 
-    public int getAvailableBuys() {
+    public int availableBuys() {
         return availableBuys;
     }
 
-    public int getAvailableCoins() {
+    public int availableCoins() {
         return availableCoins;
     }
 
-    public int getNumTurnsTaken() {
+    public int numTurnsTaken() {
         return turnsTaken;
     }
 
-    public int getDeckSize() {
+    public int deckSize() {
         return deck.size();
     }
 
-    public int getHandSize() {
+    public int handSize() {
         return hand.size();
     }
 
@@ -404,7 +415,7 @@ public abstract class Player implements Receiver {
     public abstract boolean react();
 
     // Note: true means you should discard the card at that index in the hand
-    public abstract void onCellar(boolean[] discardDecisions);
+    public abstract void onCellar(final boolean[] discardDecisions);
 
     /**
      * Decide whether to put deck in discard pile.
@@ -413,10 +424,17 @@ public abstract class Player implements Receiver {
     public abstract boolean onChancellor();
 
     /**
+     * Choose a victory card to put onto the top of your deck
+     *
+     * @return the index of a victory card in your hand.
+     */
+    public abstract int onBureaucratAttack();
+
+    /**
      *
      * @return an int array of size 3 containing the indices of cards you want to keep
      */
-    public abstract int[] onMilitiaAttack();
+    public abstract void onMilitiaAttack(final int[] cardsToKeep);
 
     /**
      *
@@ -434,6 +452,15 @@ public abstract class Player implements Receiver {
      * @return the supply pile index of the card you want to gain from the supply after trashing a card
      */
     public abstract int onGain(int costLimit);
+
+    /**
+     * Decision for whether to keep a drawn action (or reaction) card when library is played.
+     * A true return means the player wishes to keep the specified action card and add it to his/her hand.
+     *
+     * @param actionCard the drawn action card that will be kept or discarded depending on this choice
+     * @return true if the player wishes to keep the action card, false otherwise
+     */
+    public abstract boolean onLibrary(Card actionCard);
 
     /**
      *

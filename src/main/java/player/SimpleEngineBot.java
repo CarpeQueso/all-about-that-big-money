@@ -28,7 +28,7 @@ public class SimpleEngineBot extends Player implements Receiver {
 
     @Override
     public void onActionPhase() {
-        while (this.getAvailableActions() > 0 && this.handContainsType(Card.TYPE_ACTION)) {
+        while (this.availableActions() > 0 && this.handContainsType(Card.TYPE_ACTION)) {
             int handIndex = -1;
             if ((handIndex = this.findCardInHand(Game.VILLAGE_ID)) != -1) {
                 this.play(handIndex);
@@ -42,8 +42,8 @@ public class SimpleEngineBot extends Player implements Receiver {
 
     @Override
     public void onBuyPhase() {
-        while (this.getAvailableBuys() > 0) {
-            int availableCoins = this.getAvailableCoins();
+        while (this.availableBuys() > 0) {
+            int availableCoins = this.availableCoins();
             if (availableCoins >= 8 && supply.getNumCardsRemaining(Supply.PROVINCE) > 0) {
                 this.buy(Supply.PROVINCE);
             } else if (availableCoins >= 6) {
@@ -82,8 +82,13 @@ public class SimpleEngineBot extends Player implements Receiver {
     }
 
     @Override
-    public int[] onMilitiaAttack() {
-        return new int[0];
+    public int onBureaucratAttack() {
+        return 0;
+    }
+
+    @Override
+    public void onMilitiaAttack(final int[] cardsToKeep) {
+
     }
 
     @Override
@@ -94,6 +99,11 @@ public class SimpleEngineBot extends Player implements Receiver {
     @Override
     public int onGain(int costLimit) {
         return 0;
+    }
+
+    @Override
+    public boolean onLibrary(Card actionCard) {
+        return false;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class MilitiaAction implements Action {
                 int handIndex = 0;
                 int keepIndex = 0;
                 int numCardsDiscarded = 0;
-                for (int i = 0; i < player.getHandSize(); i++) {
+                for (int i = 0; i < player.handSize(); i++) {
                     if (keepIndex < keepCardIndices.length) {
                         if (handIndex != keepCardIndices[keepIndex] - numCardsDiscarded) {
                             player.discardFromHand(handIndex);

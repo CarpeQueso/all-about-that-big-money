@@ -15,6 +15,6 @@ public class GardensValue implements Value {
      */
     //Todo decide if gardens should produce accurate results all the time.
     public int getValue(Player player) {
-        return player.getDeckSize() / 10;
+        return player.deckSize() / 10;
     }
 }

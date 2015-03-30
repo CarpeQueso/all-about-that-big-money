@@ -2,8 +2,6 @@ package main.java.card.action;
 
 import main.java.player.Player;
 
-import java.util.Arrays;
-
 /**
  * Created by jon on 1/27/15.
  */
@@ -13,7 +11,7 @@ public class CellarAction implements Action {
     public void onPlay(Player player) {
         player.addActions(1);
 
-        boolean[] discardDecisions = new boolean[player.getHandSize()];
+        boolean[] discardDecisions = new boolean[player.handSize()];
         // Asking the player for decisions
         // Setting an array value to true means the player wants to discard the card at that position
         player.onCellar(discardDecisions);

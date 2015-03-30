@@ -181,10 +181,10 @@ public class Game {
         templateCards[VILLAGE_ID] = Card.initializeActionCard("Village", VILLAGE_ID, 3, new VillageAction());
         templateCards[WOODCUTTER_ID] = Card.initializeActionCard("Woodcutter", WOODCUTTER_ID, 3, new WoodcutterAction());
         templateCards[WORKSHOP_ID] = Card.initializeActionCard("Workshop", WORKSHOP_ID, 3, new WorkshopAction());
-        //templateCards[BUREAUCRAT_ID] = Card.initializeActionCard("Bureaucrat", BUREAUCRAT_ID, 4, new BureaucratAction());
+        templateCards[BUREAUCRAT_ID] = Card.initializeActionCard("Bureaucrat", BUREAUCRAT_ID, 4, new BureaucratAction(players));
         templateCards[FEAST_ID] = Card.initializeActionCard("Feast", FEAST_ID, 4, new FeastAction());
         templateCards[MILITIA_ID] = Card.initializeActionCard("Militia", MILITIA_ID, 4, new MilitiaAction(players));
-        //templateCards[MONEYLENDER_ID] = Card.initializeActionCard("Moneylender", MONEYLENDER_ID, 4, new MoneylenderAction());
+        templateCards[MONEYLENDER_ID] = Card.initializeActionCard("Moneylender", MONEYLENDER_ID, 4, new MoneylenderAction());
         templateCards[REMODEL_ID] = Card.initializeActionCard("Remodel", REMODEL_ID, 4, new RemodelAction());
         templateCards[SMITHY_ID] = Card.initializeActionCard("Smithy", SMITHY_ID, 4, new SmithyAction());
         //templateCards[SPY_ID] = Card.initializeActionCard("Spy", SPY_ID, 4, new SpyAction());
@@ -193,7 +193,7 @@ public class Game {
         templateCards[COUNCIL_ROOM_ID] = Card.initializeActionCard("Council Room", COUNCIL_ROOM_ID, 5, new CouncilRoomAction(players));
         templateCards[FESTIVAL_ID] = Card.initializeActionCard("Festival", FESTIVAL_ID, 5, new FestivalAction());
         templateCards[LABORATORY_ID] = Card.initializeActionCard("Laboratory", LABORATORY_ID, 5, new LaboratoryAction());
-        //templateCards[LIBRARY_ID] = Card.initializeActionCard("Library", LIBRARY_ID, 5, new LibraryAction());
+        templateCards[LIBRARY_ID] = Card.initializeActionCard("Library", LIBRARY_ID, 5, new LibraryAction());
         templateCards[MARKET_ID] = Card.initializeActionCard("Market", MARKET_ID, 5, new MarketAction());
         templateCards[MINE_ID] = Card.initializeActionCard("Mine", MINE_ID, 5, new MineAction());
         templateCards[WITCH_ID] = Card.initializeActionCard("Witch", WITCH_ID, 5, new WitchAction(players));
@@ -310,7 +310,7 @@ public class Game {
         for (int i = 0; i < numPlayers; i++) {
             players[i].moveAllCardsToDeck();
             currentPlayerScore = players[i].getTotalVictoryPointsInDeck();
-            currentPlayerTurns = players[i].getNumTurnsTaken();
+            currentPlayerTurns = players[i].numTurnsTaken();
             if (currentPlayerScore > highestScore) {
                 highestScore = currentPlayerScore;
                 winningPlayerIndex = i;
