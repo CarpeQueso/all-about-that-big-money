@@ -12,7 +12,7 @@ import main.java.util.messaging.Receiver;
 public class SimpleEngineBot extends Player implements Receiver {
 
     @Override
-    public void setUp() {
+    public void setup() {
         marketIndex = -1;
         smithyIndex = -1;
         villageIndex = -1;
@@ -30,6 +30,7 @@ public class SimpleEngineBot extends Player implements Receiver {
     public void onActionPhase() {
         while (this.availableActions() > 0 && this.handContainsType(Card.TYPE_ACTION)) {
             int handIndex = -1;
+            //Todo this code hurts to look at. Surely it can be rewritten to be more legible..
             if ((handIndex = this.findCardInHand(Game.VILLAGE_ID)) != -1) {
                 this.play(handIndex);
             } else if ((handIndex = this.findCardInHand(Game.MARKET_ID)) != -1) {
@@ -77,6 +78,11 @@ public class SimpleEngineBot extends Player implements Receiver {
     }
 
     @Override
+    public void onChapel(boolean[] trashDecisions) {
+
+    }
+
+    @Override
     public boolean onChancellor() {
         return false;
     }
@@ -98,6 +104,16 @@ public class SimpleEngineBot extends Player implements Receiver {
 
     @Override
     public int onGain(int costLimit) {
+        return 0;
+    }
+
+    @Override
+    public boolean onSpy(Player player, int cardID) {
+        return false;
+    }
+
+    @Override
+    public int onThroneRoom() {
         return 0;
     }
 

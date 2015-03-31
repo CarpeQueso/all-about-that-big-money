@@ -20,10 +20,11 @@ public class MilitiaAction implements Action {
         activePlayer.addCoins(2);
 
         // Attack!
-        int[] keepCardIndices;
+        int[] keepCardIndices = new int[3];
         for (Player player : players) {
             if (player != activePlayer) {
-                keepCardIndices = player.onMilitiaAttack();
+                // Modifies values. May not modify size.
+                player.onMilitiaAttack(keepCardIndices);
                 Arrays.sort(keepCardIndices);
 
                 int handIndex = 0;

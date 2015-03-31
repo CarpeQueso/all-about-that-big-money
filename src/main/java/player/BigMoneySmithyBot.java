@@ -1,6 +1,7 @@
 package main.java.player;
 
 import main.java.card.Card;
+import main.java.core.Game;
 import main.java.core.Supply;
 import main.java.util.messaging.PlayerEvent;
 
@@ -11,44 +12,44 @@ public class BigMoneySmithyBot extends Player {
 
     private int numSmithies;
 
+    private int smithyIndex;
+
     public BigMoneySmithyBot() {
         super();
 
         numSmithies = 0;
+        smithyIndex = -1;
     }
 
     @Override
-    public void setUp() {
-        //Todo search for smithy card and find index so you don't have to rely on a specific position.
+    public void setup() {
+        for (int i = Supply.KINGDOM_0; i <= Supply.KINGDOM_9; i++) {
+            if (supply.view(i).id() == Game.SMITHY_ID) {
+                smithyIndex = i;
+            }
+        }
     }
 
     @Override
     public void onActionPhase() {
-        //Todo hacky again. Make more robust later.
-        for (int i = 0; i < hand.size(); i++) {
-            if (hand.get(i).getType() == Card.TYPE_ACTION) {
-                play(i);
-            }
+        int handIndex = this.findCardInHand(Game.SMITHY_ID);
+        if (handIndex != -1) {
+            play(handIndex);
         }
     }
 
     @Override
     public void onBuyPhase() {
         int availableCoins = this.availableCoins();
-        //System.out.println("Has " + availableCoins + " to spend");
 
         if (availableCoins >= 8) {
-            //System.out.println("Buys Province");
             buy(Supply.PROVINCE);
         } else if (availableCoins >= 6) {
-            //System.out.println("Buys Gold");
             buy(Supply.GOLD);
-        } else if (availableCoins >= 4 && numSmithies < 1) {
-            //Todo find better way to access cards you want. KINGDOM_7 is only the smithy card for this kingdom.
-            buy(Supply.KINGDOM_7);
+        } else if (availableCoins >= 4 && smithyIndex != -1 && numSmithies < 1) {
+            buy(smithyIndex);
             numSmithies++;
         } else if (availableCoins >= 3) {
-            //System.out.println("Buys Silver");
             buy(Supply.SILVER);
         }
     }
@@ -68,6 +69,11 @@ public class BigMoneySmithyBot extends Player {
 
     @Override
     public void onCellar(boolean[] discardDecisions) {
+
+    }
+
+    @Override
+    public void onChapel(boolean[] trashDecisions) {
 
     }
 
@@ -93,6 +99,16 @@ public class BigMoneySmithyBot extends Player {
 
     @Override
     public int onGain(int costLimit) {
+        return 0;
+    }
+
+    @Override
+    public boolean onSpy(Player player, int cardID) {
+        return false;
+    }
+
+    @Override
+    public int onThroneRoom() {
         return 0;
     }
 

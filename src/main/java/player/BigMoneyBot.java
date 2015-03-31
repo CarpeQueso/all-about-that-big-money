@@ -16,7 +16,7 @@ public class BigMoneyBot extends Player {
     }
 
     @Override
-    public void setUp() {
+    public void setup() {
         // Set up?
     }
 
@@ -59,6 +59,11 @@ public class BigMoneyBot extends Player {
     }
 
     @Override
+    public void onChapel(boolean[] trashDecisions) {
+
+    }
+
+    @Override
     public boolean onChancellor() {
         return false;
     }
@@ -82,6 +87,16 @@ public class BigMoneyBot extends Player {
     @Override
     public int onGain(int costLimit) {
         // Do nothing
+        return 0;
+    }
+
+    @Override
+    public boolean onSpy(Player player, int cardID) {
+        return false;
+    }
+
+    @Override
+    public int onThroneRoom() {
         return 0;
     }
 

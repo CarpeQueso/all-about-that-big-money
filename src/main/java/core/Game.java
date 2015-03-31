@@ -172,10 +172,10 @@ public class Game {
         templateCards[GARDENS_ID] = Card.initializeVictoryCard("Gardens", GARDENS_ID, 4, new GardensValue());
     }
 
-    //Todo finish the rest of the action templateCards.
+    //Todo finish the rest of the action templateCards. You're so close!
     private void initActionCards() {
         templateCards[CELLAR_ID] = Card.initializeActionCard("Cellar", CELLAR_ID, 2, new CellarAction());
-        //templateCards[CHAPEL_ID] = Card.initializeActionCard("Chapel", CHAPEL_ID, 2, new ChapelAction());
+        templateCards[CHAPEL_ID] = Card.initializeActionCard("Chapel", CHAPEL_ID, 2, new ChapelAction());
         templateCards[MOAT_ID] = Card.initializeReactionCard("Moat", MOAT_ID, 2, new MoatAction());
         templateCards[CHANCELLOR_ID] = Card.initializeActionCard("Chancellor", CHANCELLOR_ID, 3, new ChancellorAction());
         templateCards[VILLAGE_ID] = Card.initializeActionCard("Village", VILLAGE_ID, 3, new VillageAction());
@@ -187,9 +187,9 @@ public class Game {
         templateCards[MONEYLENDER_ID] = Card.initializeActionCard("Moneylender", MONEYLENDER_ID, 4, new MoneylenderAction());
         templateCards[REMODEL_ID] = Card.initializeActionCard("Remodel", REMODEL_ID, 4, new RemodelAction());
         templateCards[SMITHY_ID] = Card.initializeActionCard("Smithy", SMITHY_ID, 4, new SmithyAction());
-        //templateCards[SPY_ID] = Card.initializeActionCard("Spy", SPY_ID, 4, new SpyAction());
+        templateCards[SPY_ID] = Card.initializeActionCard("Spy", SPY_ID, 4, new SpyAction(players));
         //templateCards[THIEF_ID] = Card.initializeActionCard("Thief", THIEF_ID, 4, new ThiefAction());
-        //templateCards[THRONE_ROOM_ID] = Card.initializeActionCard("Throne Room", THRONE_ROOM_ID, 4, new ThroneRoomAction());
+        templateCards[THRONE_ROOM_ID] = Card.initializeActionCard("Throne Room", THRONE_ROOM_ID, 4, new ThroneRoomAction());
         templateCards[COUNCIL_ROOM_ID] = Card.initializeActionCard("Council Room", COUNCIL_ROOM_ID, 5, new CouncilRoomAction(players));
         templateCards[FESTIVAL_ID] = Card.initializeActionCard("Festival", FESTIVAL_ID, 5, new FestivalAction());
         templateCards[LABORATORY_ID] = Card.initializeActionCard("Laboratory", LABORATORY_ID, 5, new LaboratoryAction());
@@ -220,8 +220,6 @@ public class Game {
     }
 
     private void buildPlayerStartingDecks() {
-        // Although this sort of reeks of hard-coding things, the coppers and estates are
-        // basically guaranteed to be in these positions, so I'm going to leave it be.
         for (Player player : players) {
             // Give player 7 copper
             for (int i = 0; i < 7; i++) {
@@ -238,12 +236,12 @@ public class Game {
 
     /**
      * This step is part of player initialization. Classes which extend player may do preliminary work
-     * in their setUp methods. The call to setUp() is guaranteed to be after all relevant game state
+     * in their setup methods. The call to setup() is guaranteed to be after all relevant game state
      * (e.g. the kingdom templateCards in the supply) has been completely built and is ready for viewing by the player.
      */
     private void allowExtendingClassSetUp() {
         for (Player player : players) {
-            player.setUp();
+            player.setup();
         }
     }
 

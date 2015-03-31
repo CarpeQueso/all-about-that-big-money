@@ -145,6 +145,10 @@ public abstract class Player implements Receiver {
         return hand.remove(cardIndex);
     }
 
+    public void addCardToActivePile(Card card) {
+        activePile.add(card);
+    }
+
     /**
      * Only to be used by relevant action cards. Not for extending class use.
      *
@@ -297,7 +301,7 @@ public abstract class Player implements Receiver {
      * to be initialized and properly populated. The extending class may do any preliminary work here
      * prior to the game beginning.
      */
-    public abstract void setUp();
+    public abstract void setup();
 
     public abstract void onActionPhase();
 
@@ -418,6 +422,14 @@ public abstract class Player implements Receiver {
     public abstract void onCellar(final boolean[] discardDecisions);
 
     /**
+     * Modify an array designating cards you want to trash. True means that you want to trash the card in that
+     * index position in your hand.
+     *
+     * @param trashDecisions
+     */
+    public abstract void onChapel(final boolean[] trashDecisions);
+
+    /**
      * Decide whether to put deck in discard pile.
      * @return true if you want to put your deck into your discard pile
      */
@@ -452,6 +464,22 @@ public abstract class Player implements Receiver {
      * @return the supply pile index of the card you want to gain from the supply after trashing a card
      */
     public abstract int onGain(int costLimit);
+
+    /**
+     * Decide if the given card should be kept (placed on top of the deck) or discarded.
+     * True designates the card should be kept. False, discarded.
+     *
+     * @param player
+     * @param cardID
+     * @return
+     */
+    public abstract boolean onSpy(Player player, int cardID);
+
+    /**
+     *
+     * @return
+     */
+    public abstract int onThroneRoom();
 
     /**
      * Decision for whether to keep a drawn action (or reaction) card when library is played.

@@ -12,9 +12,9 @@ public class Dominion {
     public static void main(String[] args) {
         Player[] players = new Player[2]; // This is set at 2 for now since we're focusing on the 2-player game.
         players[0] = new BigMoneyBot();
-        //players[0] = new BigMoneySmithyBot();
+        players[1] = new BigMoneySmithyBot();
         //players[1] = new SimpleEngineBot();
-        players[1] = new HumanPlayer(System.out);
+        //players[1] = new HumanPlayer(System.out);
 
         Game game = new Game(players);
         int[] kingdomCardsToUse = { Game.CELLAR_ID, Game.MOAT_ID, Game.VILLAGE_ID, Game.WOODCUTTER_ID, Game.WORKSHOP_ID,

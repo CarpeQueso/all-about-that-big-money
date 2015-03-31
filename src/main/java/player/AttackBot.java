@@ -1,14 +1,12 @@
 package main.java.player;
 
 import main.java.card.Card;
-import main.java.core.Supply;
 import main.java.util.messaging.PlayerEvent;
-import main.java.util.messaging.Receiver;
 
 /**
- * Created by jon on 3/24/15.
+ * Created by jon on 3/30/15.
  */
-public class IntegrationTestBot extends Player implements Receiver {
+public class AttackBot extends Player {
 
     @Override
     public void setup() {
@@ -22,18 +20,7 @@ public class IntegrationTestBot extends Player implements Receiver {
 
     @Override
     public void onBuyPhase() {
-        while (this.availableBuys() > 0) {
-            // Another one of those awful times that this code is terrible, but I'm going to write it anyway.
-            int maxCost = this.availableCoins();
-            outerLoop: for (int cost = maxCost; cost >= 0; cost--) {
-                for (int i = Supply.KINGDOM_0; i < Supply.TOTAL_SUPPLY_CARDS; i++) {
-                    if (supply.view(i).getCost() == cost) {
-                        this.buy(i);
-                        break outerLoop;
-                    }
-                }
-            }
-        }
+
     }
 
     @Override
@@ -53,7 +40,7 @@ public class IntegrationTestBot extends Player implements Receiver {
 
     @Override
     public void onChapel(boolean[] trashDecisions) {
-
+        
     }
 
     @Override
@@ -67,7 +54,7 @@ public class IntegrationTestBot extends Player implements Receiver {
     }
 
     @Override
-    public void onMilitiaAttack(final int[] cardsToKeep) {
+    public void onMilitiaAttack(int[] cardsToKeep) {
 
     }
 

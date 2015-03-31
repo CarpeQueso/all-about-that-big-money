@@ -20,7 +20,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void setUp() {
+    public void setup() {
 
     }
 
@@ -84,7 +84,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void onCellar(boolean[] discardDecisions) {
+    public void onCellar(final boolean[] discardDecisions) {
         stream.println("How many cards do you want to discard?");
         int numCardsToDiscard = input.nextInt();
 
@@ -93,6 +93,11 @@ public class HumanPlayer extends Player {
         for (int i = 0; i < numCardsToDiscard; i++) {
             discardDecisions[input.nextInt()] = true;
         }
+    }
+
+    @Override
+    public void onChapel(boolean[] trashDecisions) {
+
     }
 
     @Override
@@ -116,7 +121,17 @@ public class HumanPlayer extends Player {
 
     @Override
     public void onMilitiaAttack(final int[] cardsToKeep) {
-
+        printHand();
+        stream.println("You've been attacked! Choose three cards to keep!");
+        // Fill array with indices of cards to keep.
+        for (int i = 0; i < cardsToKeep.length; i++) {
+            int handIndex = input.nextInt();
+            while (handIndex < 0 || handIndex >= this.handSize()) {
+                stream.println("This index is out of bounds. Choose another..");
+                handIndex = input.nextInt();
+            }
+            cardsToKeep[i] = handIndex;
+        }
     }
 
     @Override
@@ -144,6 +159,24 @@ public class HumanPlayer extends Player {
         }
 
         return supplyIndex;
+    }
+
+    @Override
+    public boolean onSpy(Player player, int cardID) {
+        return false;
+    }
+
+    @Override
+    public int onThroneRoom() {
+        printHand();
+        stream.println("Which card do you want to play twice?");
+        int handIndex = input.nextInt();
+        while (handIndex < 0 || handIndex >= this.handSize()) {
+            stream.println("This index is out of bounds. Choose another..");
+            handIndex = input.nextInt();
+        }
+
+        return handIndex;
     }
 
     @Override
