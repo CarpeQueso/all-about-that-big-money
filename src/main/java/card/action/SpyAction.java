@@ -13,6 +13,9 @@ public class SpyAction implements Action {
     }
 
     public void onPlay(Player activePlayer) {
+        activePlayer.drawToHand();
+        activePlayer.addActions(1);
+
         Card card;
         for (Player player : players) {
             card = player.draw();
