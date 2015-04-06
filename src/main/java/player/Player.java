@@ -475,6 +475,10 @@ public abstract class Player implements Receiver {
      */
     public abstract boolean onSpy(Player player, int cardID);
 
+    public abstract int onThiefSelect(int firstCardID, int secondCardID);
+
+    public abstract boolean onThiefGain(int cardID);
+
     /**
      *
      * @return
@@ -488,6 +492,7 @@ public abstract class Player implements Receiver {
      * @param actionCard the drawn action card that will be kept or discarded depending on this choice
      * @return true if the player wishes to keep the action card, false otherwise
      */
+    //Todo decide if this should just be card id
     public abstract boolean onLibrary(Card actionCard);
 
     /**
