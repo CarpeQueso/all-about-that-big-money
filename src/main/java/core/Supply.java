@@ -3,6 +3,8 @@ package main.java.core;
 import main.java.card.Card;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Created by jon on 1/16/15.
@@ -106,12 +108,49 @@ public class Supply {
     }
 
     /**
+     * Searches for the given card and returns a reference if it is in this supply. Otherwise, null.
+     *
+     * @param cardID the id number of the card to look for
+     * @return a reference to the card with this cardID, otherwise null
+     */
+    public Card viewByCardID(int cardID) {
+        Card card;
+        for (Pile pile : supplyPiles) {
+            card = pile.view();
+            if (card.id() == cardID) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Adds a card to the trash pile to be removed from play (except under special circumstances).
      *
      * @param card the card to be added to the trash pile
      */
     public void trash(Card card) {
         trash.add(card);
+    }
+
+    /**
+     * This is a convenience method for games with human players. It allows for the kingdom cards to be ordered
+     * by cost so that they can be more easily read.
+     * Do not call this function until all kingdom cards for the current game have been added.
+     */
+    public void sortKingdomCardsByCost() {
+        Arrays.sort(supplyPiles, 0, 10, new Comparator<Pile>() {
+            @Override
+            public int compare(Pile o1, Pile o2) {
+                if (o1.view().getCost() < o2.view().getCost()) {
+                    return -1;
+                } else if (o1.view().getCost() == o2.view().getCost()) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
     /**

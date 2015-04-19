@@ -17,6 +17,8 @@ public final class Card {
 
     public static final int TYPE_REACTION = 3;
 
+    public static final int TYPE_CURSE = 4;
+
     public final int id;
 
     private String name;
@@ -35,6 +37,19 @@ public final class Card {
 
     public static Card initializeVictoryCard(String name, int id, int cost, Value value) {
         return new Card(TYPE_VICTORY, name, id, cost, value, null);
+    }
+
+    /**
+     * This factory method is necessary because curse cards do *not* count as victory cards according to game rules.
+     * It must be a distinct card type.
+     * @param name
+     * @param id
+     * @param cost
+     * @param value
+     * @return
+     */
+    public static Card initializeCurseCard(String name, int id, int cost, Value value) {
+        return new Card(TYPE_CURSE, name, id, cost, value, null);
     }
 
     public static Card initializeActionCard(String name, int id, int cost, Action action) {

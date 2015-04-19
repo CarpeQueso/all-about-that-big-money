@@ -52,9 +52,9 @@ public class ThiefAction implements Action {
 
             // Decide to keep or trash selected card
             if (activePlayer.onThiefGain(selectedCard.id())) {
-                activePlayer.discard(selectedCard);
+                activePlayer.gain(selectedCard);
             } else {
-                activePlayer.trash(selectedCard);
+                player.trash(selectedCard);
             }
 
         }

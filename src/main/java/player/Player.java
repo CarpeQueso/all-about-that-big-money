@@ -10,6 +10,7 @@ import main.java.util.messaging.Receiver;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Created by jon on 1/16/15.
@@ -27,8 +28,6 @@ public abstract class Player implements Receiver {
 
     // Cards that have been played traditionally
     private ArrayList<Card> activePile;
-
-    //Todo add a revealed pile to help with odd interactions
 
     private Microphone microphone;
 
@@ -115,11 +114,12 @@ public abstract class Player implements Receiver {
     }
 
     public void shuffleDiscardPileIntoDeck() {
+        Random random = new Random();
         // Place a random card from the discard pile back into the
         // deck until the discard pile is empty
-        while (!discardPile.isEmpty()) {
+        while (discardPile.size() > 0) {
             deck.add(
-                    discardPile.remove((int) Math.round(Math.random() * (discardPile.size() - 1)))
+                    discardPile.remove(random.nextInt(discardPile.size()))
             );
         }
     }
@@ -131,6 +131,15 @@ public abstract class Player implements Receiver {
     public int findCardInHand(int cardID) {
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).id() == cardID) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int findFirstCardOfType(int cardType) {
+        for (int i = 0; i < hand.size(); i++) {
+            if (hand.get(i).getType() == cardType) {
                 return i;
             }
         }
@@ -160,10 +169,14 @@ public abstract class Player implements Receiver {
         }
     }
 
+    public void gain(Card card) {
+        discard(card);
+        microphone.say(this, PlayerEvent.GAIN, card);
+    }
+
     public boolean gain(int supplyIndex) {
         if (supply.getNumCardsRemaining(supplyIndex) > 0) {
-            discard(supply.take(supplyIndex));
-            microphone.say(this, PlayerEvent.GAIN, supply.view(supplyIndex));
+            gain(supply.take(supplyIndex));
             return true;
         }
         return false;
@@ -469,12 +482,22 @@ public abstract class Player implements Receiver {
      * Decide if the given card should be kept (placed on top of the deck) or discarded.
      * True designates the card should be kept. False, discarded.
      *
+     * This is pretty sloppy to pass the player around. Don't do anything stupid with it.
+     *
      * @param player
      * @param cardID
      * @return
      */
     public abstract boolean onSpy(Player player, int cardID);
 
+    /**
+     * You can guarantee that the given card ids are in the supply this game. Calling Supply's <code>view(cardID)</code>
+     * will not return a null value.
+     *
+     * @param firstCardID
+     * @param secondCardID
+     * @return the card id to be trashed in the thief action
+     */
     public abstract int onThiefSelect(int firstCardID, int secondCardID);
 
     public abstract boolean onThiefGain(int cardID);

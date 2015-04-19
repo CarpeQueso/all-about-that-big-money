@@ -1,6 +1,7 @@
 package main.java.player;
 
 import main.java.card.Card;
+import main.java.core.Game;
 import main.java.core.Supply;
 import main.java.util.messaging.PlayerEvent;
 
@@ -49,7 +50,6 @@ public class BigMoneyBot extends Player {
 
     @Override
     public boolean react() {
-        // Do nothing
         return false;
     }
 
@@ -70,12 +70,20 @@ public class BigMoneyBot extends Player {
 
     @Override
     public int onBureaucratAttack() {
-        return 0;
+        int handIndex = findCardInHand(Game.PROVINCE_ID);
+        if (handIndex != -1) {
+            return handIndex;
+        } else {
+            return findCardInHand(Game.ESTATE_ID);
+        }
     }
 
     @Override
     public void onMilitiaAttack(final int[] cardsToKeep) {
-
+        //Todo quick and dirty solution here.. let's not make a habit of this..
+        for (int i = 0; i < cardsToKeep.length; i++) {
+            cardsToKeep[i] = i;
+        }
     }
 
     @Override
@@ -92,6 +100,16 @@ public class BigMoneyBot extends Player {
 
     @Override
     public boolean onSpy(Player player, int cardID) {
+        return false;
+    }
+
+    @Override
+    public int onThiefSelect(int firstCardID, int secondCardID) {
+        return 0;
+    }
+
+    @Override
+    public boolean onThiefGain(int cardID) {
         return false;
     }
 

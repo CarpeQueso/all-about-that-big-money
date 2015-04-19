@@ -19,12 +19,13 @@ public class SpyAction implements Action {
         Card card;
         for (Player player : players) {
             card = player.draw();
-
-            // Note: the active player makes all of the decisions regarding keep/discard
-            if (activePlayer.onSpy(player, card.id())) {
-                player.putCardOnDeck(card);
-            } else {
-                player.discard(card);
+            if (card != null) {
+                // Note: the active player makes all of the decisions regarding keep/discard
+                if (activePlayer.onSpy(player, card.id())) {
+                    player.putCardOnDeck(card);
+                } else {
+                    player.discard(card);
+                }
             }
         }
     }

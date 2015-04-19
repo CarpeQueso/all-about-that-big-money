@@ -18,7 +18,6 @@ public class CouncilRoomAction implements Action {
         actingPlayer.addBuys(1);
 
         for (Player player : players) {
-            //Todo TEST THIS CONDITION. Need to know if it fails.
             if (player != actingPlayer) {
                 player.drawToHand();
             }

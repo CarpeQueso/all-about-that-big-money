@@ -15,7 +15,7 @@ public class ChapelAction implements Action {
         player.onChapel(trashDecisions);
 
         for (int i = trashDecisions.length - 1; i >= 0; i--) {
-            if (trashDecisions[i] && numCardsTrashed <= 4) { // i.e. you want to discard this card
+            if (trashDecisions[i] && numCardsTrashed <= 4) {
                 player.trashFromHand(i);
                 numCardsTrashed++;
             }

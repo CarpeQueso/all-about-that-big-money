@@ -40,7 +40,7 @@ public class AttackBot extends Player {
 
     @Override
     public void onChapel(boolean[] trashDecisions) {
-        
+
     }
 
     @Override
@@ -70,6 +70,16 @@ public class AttackBot extends Player {
 
     @Override
     public boolean onSpy(Player player, int cardID) {
+        return false;
+    }
+
+    @Override
+    public int onThiefSelect(int firstCardID, int secondCardID) {
+        return 0;
+    }
+
+    @Override
+    public boolean onThiefGain(int cardID) {
         return false;
     }
 

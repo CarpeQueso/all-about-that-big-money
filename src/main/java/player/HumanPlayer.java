@@ -21,7 +21,8 @@ public class HumanPlayer extends Player {
 
     @Override
     public void setup() {
-
+        //Todo this is TEMPORARY. Make better later
+        supply.sortKingdomCardsByCost();
     }
 
     @Override
@@ -97,7 +98,14 @@ public class HumanPlayer extends Player {
 
     @Override
     public void onChapel(boolean[] trashDecisions) {
+        stream.println("How many cards do you want to trash?");
+        int numCardsToTrash = input.nextInt();
 
+        printHand();
+        stream.println("Enter the indices of each card to discard.");
+        for (int i = 0; i < numCardsToTrash; i++) {
+            trashDecisions[input.nextInt()] = true;
+        }
     }
 
     @Override
@@ -163,7 +171,35 @@ public class HumanPlayer extends Player {
 
     @Override
     public boolean onSpy(Player player, int cardID) {
-        return false;
+        if (this == player) {
+            stream.print("Spy Action! The revealed card is: " + supply.view(cardID).getName() + "\n");
+            stream.println("Do you want to put this card back onto your deck? [y/n]");
+            return input.next().trim().toLowerCase().charAt(0) == 'y';
+        } else {
+            stream.print("Spy Action! The revealed card is: " + supply.view(cardID).getName() + "\n");
+            stream.println("Do you want to put this card back onto your opponent's deck? [y/n]");
+            return input.next().trim().toLowerCase().charAt(0) == 'y';
+        }
+    }
+
+    @Override
+    public int onThiefSelect(int firstCardID, int secondCardID) {
+        stream.println("Thief select! Choose one of the two cards from your opponent's deck to trash...");
+        stream.println("0 - " + supply.view(firstCardID).getName());
+        stream.println("1 - " + supply.view(secondCardID).getName());
+        stream.println("Enter 0 for the first card, 1 for the second.");
+        if (input.nextInt() == 0) {
+            return firstCardID;
+        } else {
+            return secondCardID;
+        }
+    }
+
+    @Override
+    public boolean onThiefGain(int cardID) {
+        stream.println("Do you want to gain this card? [y/n]");
+        stream.println(supply.view(cardID).getName());
+        return input.next().trim().toLowerCase().charAt(0) == 'y';
     }
 
     @Override

@@ -10,13 +10,15 @@ public class ThroneRoomAction implements Action {
 
     public void onPlay(Player player) {
         int handIndex = player.onThroneRoom();
-        Card card = player.takeCardFromHand(handIndex);
+        if (handIndex != -1) {
+            Card card = player.takeCardFromHand(handIndex);
 
-        // Play card twice.
-        card.onPlay(player);
-        card.onPlay(player);
+            // Play card twice.
+            card.onPlay(player);
+            card.onPlay(player);
 
-        // Add card to active pile manually since we're bypassing normal play functionality.
-        player.addCardToActivePile(card);
+            // Add card to active pile manually since we're bypassing normal play functionality.
+            player.addCardToActivePile(card);
+        }
     }
 }

@@ -87,6 +87,16 @@ public class IntegrationTestBot extends Player implements Receiver {
     }
 
     @Override
+    public int onThiefSelect(int firstCardID, int secondCardID) {
+        return 0;
+    }
+
+    @Override
+    public boolean onThiefGain(int cardID) {
+        return false;
+    }
+
+    @Override
     public int onThroneRoom() {
         return 0;
     }

@@ -94,6 +94,8 @@ public class Game {
 
     private Supply supply;
 
+    private int turnsTaken;
+
     private final int numPlayers;
 
     /**
@@ -103,6 +105,7 @@ public class Game {
      */
     public Game(Player[] players) {
         numPlayers = players.length;
+        turnsTaken = 0;
         this.players = players;
         templateCards = new Card[TOTAL_AVAILABLE_CARDS];
 
@@ -117,7 +120,7 @@ public class Game {
         }
 
         //Todo make this conditional with a verbose option (or something better)
-        playerChannel.addReceiver(new SimpleLogger(System.out));
+        //playerChannel.addReceiver(new SimpleLogger(System.out));
 
 
         initCards();
@@ -143,6 +146,7 @@ public class Game {
      * @param cardsToUse
      */
     public void setup(int[] cardsToUse) {
+        turnsTaken = 0;
         addKingdomCardsToSupply(cardsToUse);
         supply.reset();
         for (Player player : players) {
@@ -165,14 +169,13 @@ public class Game {
     }
 
     private void initVictoryCards() {
-        templateCards[CURSE_ID] = Card.initializeVictoryCard("Curse", CURSE_ID, 0, new SimpleValue(-1));
+        templateCards[CURSE_ID] = Card.initializeCurseCard("Curse", CURSE_ID, 0, new SimpleValue(-1));
         templateCards[ESTATE_ID] = Card.initializeVictoryCard("Estate", ESTATE_ID, 2, new SimpleValue(1));
         templateCards[DUCHY_ID] = Card.initializeVictoryCard("Duchy", DUCHY_ID, 5, new SimpleValue(3));
         templateCards[PROVINCE_ID] = Card.initializeVictoryCard("Province", PROVINCE_ID, 8, new SimpleValue(6));
         templateCards[GARDENS_ID] = Card.initializeVictoryCard("Gardens", GARDENS_ID, 4, new GardensValue());
     }
 
-    //Todo finish the rest of the action templateCards. You're so close!
     private void initActionCards() {
         templateCards[CELLAR_ID] = Card.initializeActionCard("Cellar", CELLAR_ID, 2, new CellarAction());
         templateCards[CHAPEL_ID] = Card.initializeActionCard("Chapel", CHAPEL_ID, 2, new ChapelAction());
@@ -188,7 +191,7 @@ public class Game {
         templateCards[REMODEL_ID] = Card.initializeActionCard("Remodel", REMODEL_ID, 4, new RemodelAction());
         templateCards[SMITHY_ID] = Card.initializeActionCard("Smithy", SMITHY_ID, 4, new SmithyAction());
         templateCards[SPY_ID] = Card.initializeActionCard("Spy", SPY_ID, 4, new SpyAction(players));
-        //templateCards[THIEF_ID] = Card.initializeActionCard("Thief", THIEF_ID, 4, new ThiefAction());
+        templateCards[THIEF_ID] = Card.initializeActionCard("Thief", THIEF_ID, 4, new ThiefAction(players));
         templateCards[THRONE_ROOM_ID] = Card.initializeActionCard("Throne Room", THRONE_ROOM_ID, 4, new ThroneRoomAction());
         templateCards[COUNCIL_ROOM_ID] = Card.initializeActionCard("Council Room", COUNCIL_ROOM_ID, 5, new CouncilRoomAction(players));
         templateCards[FESTIVAL_ID] = Card.initializeActionCard("Festival", FESTIVAL_ID, 5, new FestivalAction());
@@ -258,10 +261,10 @@ public class Game {
         Player currentPlayer = players[playerIndex];
 
         while (!gameOver()) {
-            //System.out.println("--- Player " + playerIndex + "\'s Turn ---");
             currentPlayer.takeTurn();
             playerIndex = (playerIndex + 1) % numPlayers;
             currentPlayer = players[playerIndex];
+            turnsTaken++;
         }
     }
 
@@ -326,5 +329,10 @@ public class Game {
         }
 
         return winningPlayerIndex;
+    }
+
+
+    public int fullTurnsTaken() {
+        return turnsTaken / numPlayers;
     }
 }
